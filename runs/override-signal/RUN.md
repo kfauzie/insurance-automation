@@ -11,7 +11,7 @@
 | Step | Skill | Output |
 |---|---|---|
 | 1. Data review | `pm-1-data-discovery` (Initial review) | [01-data-review.md](01-data-review.md) |
-| 2. Discovery guide | `pm-2-discovery-interview` | |
+| 2. Discovery guide | `pm-2-discovery-interview` | Notion (private draft): [discovery questions](https://app.notion.com/p/4218f31ef05f81d6a8f1f4901db4057f) |
 | 3. Discovery notes | the PM | |
 | 4. Research synthesis | `pm-1-data-discovery` (Answer) | |
 | 5. Spec: solution concept | `pm-3-problem-to-solution-concept` | |
