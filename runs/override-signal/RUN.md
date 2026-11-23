@@ -6,14 +6,16 @@
 > Claims handlers make the final call on every claim, and they often override or correct the AI's recommendation. Those overrides are the best signal of where the AI is wrong, but today they aren't captured consistently. Nobody can easily see which claim types or which steps go wrong most, how much each error costs, or whether a fix actually worked. So engineers end up debugging case by case, from whatever handlers happen to report
 
 **Base product:** extends Fernway's existing internal claims platform and its AI automations; not a new claims system.
+- Known from the call: handlers see the AI's recommendation in the claims workspace and use an Override button, pick a decision and type a required note. Engineers built a dashboard of override rates by claim type.
+- Assumed: the platform logs the AI's recommendation and amount, the handler's decision and amount, and the note, for every claim (as in the export). It does not yet log which AI step or version made the call.
 **Data:** `data/claims_synthetic.csv` (synthetic, provided): 300 claims, 3 Aug to 11 Nov 2026; one AI recommendation and the handler's final call per claim.
 
 | Step | Skill | Output |
 |---|---|---|
 | 1. Data review | `pm-1-data-discovery` (Initial review) | [01-data-review.md](01-data-review.md) |
 | 2. Discovery guide | `pm-2-discovery-interview` | Notion (private draft): [discovery questions](https://app.notion.com/p/4218f31ef05f81d6a8f1f4901db4057f) |
-| 3. Discovery notes | the PM | |
-| 4. Research synthesis | `pm-1-data-discovery` (Answer) | |
+| 3. Discovery notes | the PM | Simulated call with a VP of Claims, transcript in the Notion page |
+| 4. Research synthesis | `pm-1-data-discovery` (Answer) | [04-synthesis.md](04-synthesis.md) |
 | 5. Spec: solution concept | `pm-3-problem-to-solution-concept` | |
 | 6. Design | `pm-4-solution-design` | |
 | 7. Prototype | `pm-5-mvp-build` | |
