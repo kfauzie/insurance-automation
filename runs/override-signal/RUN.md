@@ -17,7 +17,7 @@
 | 3. Discovery notes | the PM | Simulated call with a VP of Claims, transcript in the Notion page |
 | 4. Research synthesis | `pm-1-data-discovery` (Answer) | [04-synthesis.md](04-synthesis.md) |
 | 5. Spec: solution concept | `pm-3-problem-to-solution-concept` | Notion (private draft): [solution concept](https://app.notion.com/p/4218f31ef05f81f2bcf2f740895edcbf) |
-| 6. Design | `pm-4-solution-design` | |
+| 6. Design | `pm-4-solution-design` | [06-screen-specs.md](06-screen-specs.md), [design/](design/) (screen 1 designed) |
 | 7. Prototype | `pm-5-mvp-build` | |
 | 8. MVP review | `pm-6-mvp-review` | |
 
@@ -30,3 +30,5 @@
 | Recommend a Mistake log that reads existing override notes, not a structured reason form | 45 of 55 overrides already say what went wrong; the VP: "has to work with that mess, not assume people will suddenly fill in perfect forms" | A structured reason at override (later, once the kinds of mistake are known); a weekly manual review (the monthly one lapsed) |
 | Rank mistakes by kind, not by claim type | Override rate by claim type is flat (16.7% to 20.0%) | The existing claim-type view |
 | Rank by £ at stake, and show how many were valid claims denied | Simple and checkable; whether denials should count extra is left to the MVP review | A weighted score nobody can check by hand |
+| Add a "By mistake" tab to the existing Overrides page, keep "By claim type" | Feedback: the team very likely already tracks override rates; this upgrades it with the why, the £ and fix tracking | A new standalone tool |
+| Fix status that flips to "came back" when a fixed mistake repeats | The VP's test of success is "the same mistake stopped coming back" (hypothesis); error trackers use the same pattern | A one-off "resolved" checkbox |

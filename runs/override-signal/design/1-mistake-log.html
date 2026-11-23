@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Overrides · Fernway</title>
+<style>
+:root{
+ --text:#343a40;--head:#212529;--muted:#6c757d;--line:#e3e6ea;--bg:#f8f9fa;--panel:#fff;
+ --brand:#3f51b5;--brand-tint:#eef0fb;
+ --good:#1e7a46;--good-tint:#e8f5ee;--bad:#b42318;--bad-tint:#fdecea;--warn:#8a5a00;--warn-tint:#fff4db;--warn-line:#f2d08a;
+ --ai:#6d3fb8;--ai-tint:#f3eefc;
+}
+*{box-sizing:border-box}body{margin:0;font:13px/1.45 Inter,Arial,sans-serif;color:var(--text);background:var(--bg)}
+.app{display:grid;grid-template-columns:200px 1fr;min-height:100vh}
+nav{background:#fff;border-right:1px solid var(--line);padding:16px 12px}
+.logo{display:flex;align-items:center;gap:8px;font-weight:700;color:var(--head);font-size:15px;margin:0 6px 22px}
+nav a{display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:6px;color:var(--text);text-decoration:none;margin-bottom:2px}
+nav a.on{background:#eceef1;color:var(--head);font-weight:600}
+nav svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.6}
+main{padding:20px 28px 40px;max-width:1240px}
+.meta{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;font-size:12px;color:var(--muted);margin-bottom:14px}
+.meta b{color:var(--text);font-weight:500}
+.synth{display:inline-block;font-size:11px;padding:1px 7px;border-radius:10px;background:#eceef1;color:var(--muted);margin-left:6px}
+h1{font-size:22px;color:var(--head);margin:0}
+.sub{color:var(--muted);margin:2px 0 12px}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:16px}
+.tabs span{padding:8px 12px;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px}
+.tabs .on{color:var(--head);font-weight:600;border-color:var(--head)}
+.new{font-size:10px;font-weight:600;color:var(--muted);background:#eceef1;padding:1px 6px;border-radius:8px;margin-left:5px}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:12px}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:8px;padding:12px 14px}
+.kpi .l{color:var(--muted);font-size:12px}.kpi .v{font-size:24px;font-weight:600;color:var(--head);margin-top:2px}
+.kpi .s{font-size:12px;color:var(--muted)}.kpi .v.bad{color:var(--bad)}
+.notice{display:flex;align-items:center;gap:10px;background:var(--warn-tint);border:1px solid var(--warn-line);color:var(--warn);border-radius:8px;padding:9px 12px;margin-bottom:12px}
+.notice .grow{flex:1}
+.btn{font:inherit;font-size:12px;padding:6px 11px;border-radius:6px;border:1px solid #cfd4da;background:#fff;color:var(--text);cursor:pointer;white-space:nowrap}
+.btn.primary{background:var(--brand);border-color:var(--brand);color:#fff;font-weight:600}
+.bar{display:flex;align-items:center;justify-content:space-between;margin:4px 0 8px}
+.bar h2{font-size:15px;margin:0;color:var(--head)}
+.sel{display:inline-flex;align-items:center;gap:6px;border:1px solid #cfd4da;background:#fff;border-radius:6px;padding:5px 9px;font-size:12px}
+.def{font-size:10px;color:var(--muted);background:#eceef1;border-radius:8px;padding:0 6px}
+table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+th{text-align:left;font-weight:500;font-size:11.5px;color:var(--muted);padding:8px 10px;border-bottom:1px solid var(--line);background:#fbfbfc}
+td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+tr.open>td{background:#fbfbff}
+.rank{color:var(--muted);width:22px}
+.mname{color:var(--head);font-weight:500}
+.step{display:inline-block;font-size:11px;color:var(--muted);border:1px solid var(--line);border-radius:10px;padding:0 7px}
+.chev{color:var(--muted);margin-right:6px;font-size:10px}
+.denied{color:var(--bad);font-weight:600}
+.zero{color:#adb5bd}
+.st{font-size:12px;white-space:nowrap}
+.st .dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px;vertical-align:1px}
+.st.none{color:var(--muted)}.st.none .dot{background:#ced4da}
+.st.ok{color:var(--good)}.st.ok .dot{background:var(--good)}
+.st.back{color:var(--bad)}.st.back .dot{background:var(--bad)}
+.spark{display:flex;align-items:flex-end;gap:2px;height:20px}
+.spark i{display:block;width:5px;background:#c5cae9;border-radius:1px}
+.spark i.z{background:#e9ecef;height:2px!important}
+.spark i.after{background:var(--bad)}
+.detail td{padding:0;background:#fbfbff}
+.dwrap{display:grid;grid-template-columns:1fr 280px;gap:16px;padding:4px 14px 14px 42px}
+.claims .h{font-size:11.5px;color:var(--muted);margin:6px 0}
+.cl{display:grid;grid-template-columns:72px 150px 190px 1fr auto;gap:10px;align-items:center;padding:7px 10px;background:#fff;border:1px solid var(--line);border-radius:6px;margin-bottom:5px;font-size:12px}
+.cl .id{font-weight:600;color:var(--head)}.cl .t{color:var(--muted)}
+.cl .note{font-style:italic;color:var(--text)}
+.cl .note:before{content:"\201C"}.cl .note:after{content:"\201D"}
+.pill{font-size:11px;border-radius:10px;padding:1px 7px;white-space:nowrap}
+.pill.den{background:var(--bad-tint);color:var(--bad)}
+.ok-lead{font-size:11px;color:var(--good)}
+.side{background:#fff;border:1px solid var(--line);border-radius:8px;padding:12px;align-self:start;margin-top:26px}
+.ai{font-size:11px;font-weight:600;color:var(--ai);background:var(--ai-tint);border-radius:8px;padding:1px 7px}
+.side p{margin:8px 0 10px}
+.side .kv{display:grid;grid-template-columns:auto 1fr;gap:3px 10px;font-size:12px;margin-bottom:12px}
+.side .kv span:nth-child(odd){color:var(--muted)}
+.side .btn.primary{width:100%;padding:8px}
+.foot{color:var(--muted);font-size:12px;padding:9px 10px}
+.hint{border-bottom:1px dotted var(--muted);cursor:help}
+</style></head><body>
+<div class="app">
+<nav>
+ <div class="logo"><svg width="22" height="22" viewBox="0 0 22 22"><rect x="2" y="2" width="18" height="18" rx="5" fill="#3f51b5"/><path d="M7 15 L11 7 L15 15" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M8.6 12h4.8" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>Fernway</div>
+ <a href="#"><svg viewBox="0 0 16 16"><rect x="2" y="2" width="12" height="12" rx="2"/><path d="M2 6h12"/></svg>Workspace</a>
+ <a href="#"><svg viewBox="0 0 16 16"><path d="M4 2h6l3 3v9H4z"/><path d="M6 8h5M6 11h5"/></svg>Claims</a>
+ <a href="#" class="on"><svg viewBox="0 0 16 16"><path d="M3 5h8l-2-2M13 11H5l2 2"/></svg>Overrides</a>
+ <a href="#"><svg viewBox="0 0 16 16"><path d="M3 13V8M8 13V3M13 13V6"/></svg>Reports</a>
+</nav>
+<main>
+ <div class="meta"><span>Team</span><b>Fernway claims</b><span>User</span><b>VP of Claims, with the engineering leads</b><span>Job to be done</span><b>Decide what the engineers fix next, and check each fix landed</b></div>
+ <h1>Overrides <span class="synth">Synthetic data</span></h1>
+ <div class="sub">Claims received 3 Aug to 11 Nov 2026 · 300 claims</div>
+ <div class="tabs"><span>By claim type</span><span class="on">By mistake<span class="new">New</span></span></div>
+
+ <div class="kpis">
+  <div class="kpi"><div class="l">Overrides</div><div class="v">55</div><div class="s">18.3% of claims · decision or payout changed</div></div>
+  <div class="kpi"><div class="l"><span class="hint" title="What these claims would have cost if the handler had followed the AI: the payout difference, the payout lost on a valid claim the AI denied, or the payout made on a claim the AI should have denied. Delayed: the AI asked for information or a fraud review the claim didn't need.">£ at stake if the AI had been followed</span></div><div class="v">£68,714</div><div class="s">£24,599 overpaid · £30,390 underpaid · £13,725 delayed</div></div>
+  <div class="kpi"><div class="l">Valid claims the AI denied</div><div class="v bad">14</div><div class="s">£27,611 · every one caught by a handler</div></div>
+ </div>
+
+ <div class="notice"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 2 15 14H1z"/><path d="M8 7v3M8 12v.5"/></svg>
+  <span class="grow"><b>Needs a team lead: 10 overrides (£11,281) don't say what went wrong yet.</b> The note was vague, for example "disagree w AI", and the claim documents didn't settle it.</span>
+  <button class="btn">Send to team lead review</button></div>
+
+ <div class="bar"><h2>Mistakes, biggest first</h2>
+  <span class="sel">Rank by: <b>£ at stake</b> <span class="def">Default</span> ▾</span></div>
+ <table>
+  <tr><th></th><th>Mistake</th><th>Step</th><th class="n">Overrides</th><th class="n">£ at stake</th><th class="n">Valid claims denied</th><th>Last 14 weeks</th><th>Fix</th></tr>
+  <tr class="open"><td class="rank">1</td><td><span class="chev">▼</span><span class="mname">Missed cover on the policy schedule</span><div class="t" style="color:var(--muted);font-size:12px;margin-left:16px">An extension clause or endorsement adds cover</div></td><td><span class="step">Policy check</span></td><td class="n">5</td><td class="n">£14,502</td><td class="n denied">5</td>
+   <td><div class="spark"><i style="height:8px"></i><i style="height:14px"></i><i style="height:8px"></i><i class="z"></i><i class="z"></i><i class="z"></i><i class="z"></i><i class="z"></i><i class="z"></i><i class="z"></i><i class="z"></i><i style="height:8px"></i><i class="z"></i><i class="z"></i></div></td>
+   <td class="st none"><span class="dot"></span>Not started</td></tr>
+  <tr class="detail"><td colspan="8"><div class="dwrap">
+   <div class="claims"><div class="h">5 claims behind this mistake · as the handler wrote it</div>
+    <div class="cl"><span class="id">CLM-1097</span><span class="t">Liability · 24 Aug</span><span style="white-space:nowrap">AI: Deny → Approve £5,942</span><span class="note">covered under extension clause, AI said excluded</span><span class="pill den">Valid claim denied</span></div>
+    <div class="cl"><span class="id">CLM-1036</span><span class="t">Liability · 26 Oct</span><span style="white-space:nowrap">AI: Deny → Approve £3,782</span><span class="note">cover applies, endorsement was added in march</span><span class="pill den">Valid claim denied</span></div>
+    <div class="cl"><span class="id">CLM-1182</span><span class="t">Property damage · 16 Aug</span><span style="white-space:nowrap">AI: Deny → Approve £2,882</span><span class="note">cover applies, endorsement was added in march</span><span class="pill den">Valid claim denied</span></div>
+    <div class="cl"><span class="id">CLM-1015</span><span class="t">Motor · 14 Aug</span><span style="white-space:nowrap">AI: Deny → Approve £1,360</span><span class="note">covered under extension clause, AI said excluded</span><span class="pill den">Valid claim denied</span></div>
+    <div class="cl"><span class="id">CLM-1248</span><span class="t">Travel · 13 Aug</span><span style="white-space:nowrap">AI: Deny → Approve £536</span><span class="note">covered under extension clause, AI said excluded</span><span class="pill den">Valid claim denied</span></div>
+   </div>
+   <div class="side"><span class="ai">AI summary</span> <span class="ok-lead">✓ Confirmed by a team lead</span>
+    <p>The AI checks the main policy wording but not the schedule, so cover added by an extension clause or a later endorsement is missed and the claim is denied as excluded.</p>
+    <div class="kv"><span>First seen</span><span>13 Aug</span><span>Last seen</span><span>26 Oct</span><span>Claim types</span><span>Liability, Motor, Property damage, Travel</span></div>
+    <button class="btn primary">Record a fix</button></div>
+  </div></td></tr>
+  <tr><td class="rank">2</td><td><span class="chev">▶</span><span class="mname">Time window or date read wrong</span></td><td><span class="step">Policy check</span></td><td class="n">4</td><td class="n">£7,830</td><td class="n denied">4</td>
+   <td><div class="spark"><i class="z"></i><i class="z"></i><i style="height:8px"></i><i class="z"></i><i class="z"></i><i style="height:8px"></i><i class="z"></i><i class="z"></i><i class="z"></i><i class="z"></i><i style="height:14px"></i><i class="z"></i><i class="z"></i><i class="z"></i></div></td>
+   <td class="st none"><span class="dot"></span>Not started</td></tr>
+  <tr><td class="rank">3</td><td><span class="chev">▶</span><span class="mname">Repeat claimant flagged, separate incidents</span></td><td><span class="step">Fraud check</span></td><td class="n">2</td><td class="n">£4,743</td><td class="n zero">0</td>
+   <td><div class="spark"><i style="height:8px"></i><i class="z"></i><i class="z"></i><i class="z"></i><i class="z"></i><i class="z"></i><i class="z"></i><i class="z"></i><i style="height:8px"></i><i class="z"></i><i class="z"></i><i class="z"></i><i class="z"></i><i class="z"></i></div></td>
+   <td class="st none"><span class="dot"></span>Not started</td></tr>
+  <tr><td class="rank">4</td><td><span class="chev">▶</span><span class="mname">Wrong policy version applied</span></td><td><span class="step">Policy check</span></td><td class="n">3</td><td class="n">£4,356</td><td class="n zero">0</td>
+   <td><div class="spark"><i class="z"></i><i class="z"></i><i style="height:8px"></i><i class="z"></i><i class="z"></i><i class="z"></i><i class="z"></i><i class="z"></i><i class="z"></i><i class="after" style="height:8px"></i><i class="z"></i><i class="z"></i><i class="after" style="height:8px"></i><i class="z"></i></div></td>
+   <td class="st back"><span class="dot"></span>Fixed 7 Oct · came back 2 times</td></tr>
+  <tr><td class="rank">5</td><td><span class="chev">▶</span><span class="mname">Total read from the wrong page</span></td><td><span class="step">Document reading</span></td><td class="n">4</td><td class="n">£3,574</td><td class="n zero">0</td>
+   <td><div class="spark"><i class="z"></i><i class="z"></i><i class="z"></i><i class="z"></i><i class="z"></i><i style="height:14px"></i><i style="height:14px"></i><i class="z"></i><i class="z"></i><i class="z"></i><i class="z"></i><i class="z"></i><i class="z"></i><i class="z"></i></div></td>
+   <td class="st ok"><span class="dot"></span>Fixed 28 Oct · 0 repeats in 2 weeks</td></tr>
+  <tr><td class="rank">6</td><td><span class="chev">▶</span><span class="mname">Date on a document misread</span></td><td><span class="step">Document reading</span></td><td class="n">3</td><td class="n">£3,001</td><td class="n zero">0</td>
+   <td><div class="spark"><i class="z"></i><i class="z"></i><i class="z"></i><i class="z"></i><i class="z"></i><i class="z"></i><i style="height:8px"></i><i class="z"></i><i class="z"></i><i style="height:14px"></i><i class="z"></i><i class="z"></i><i class="z"></i><i class="z"></i></div></td>
+   <td class="st none"><span class="dot"></span>Not started</td></tr>
+  <tr><td class="rank">7</td><td><span class="chev">▶</span><span class="mname">Scan or photo garbled</span></td><td><span class="step">Document reading</span></td><td class="n">4</td><td class="n">£2,917</td><td class="n zero">0</td>
+   <td><div class="spark"><i class="z"></i><i class="z"></i><i class="z"></i><i class="z"></i><i class="z"></i><i style="height:8px"></i><i class="z"></i><i class="z"></i><i class="z"></i><i style="height:8px"></i><i class="z"></i><i class="z"></i><i style="height:8px"></i><i style="height:8px"></i></div></td>
+   <td class="st none"><span class="dot"></span>Not started</td></tr>
+  <tr><td colspan="8" class="foot">Showing 7 of 19 mistakes · 45 overrides named, 10 waiting for a team lead</td></tr>
+ </table>
+</main></div>
+</body></html>
