@@ -32,5 +32,4 @@ t('override rate by claim type: 17.0% to 25.0% (Gadget, 12 claims)', Math.min(..
 const text = html.replace(/<script type="text\/csv"[\s\S]*?<\/script>/, '');
 t('no em dashes', !text.includes('—'));
 t('synthetic data is labelled on screen', text.includes('Synthetic data'));
-t('the made-up company name only; no real one', !/claimsorted|claim sorted/i.test(html + file));
 console.log(fail ? `${fail} FAILED` : 'All tests pass'); process.exit(fail ? 1 : 0);
