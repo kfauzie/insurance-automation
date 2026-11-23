@@ -1,0 +1,11 @@
+{
+  "name": "insurance-automation",
+  "private": true,
+  "description": "Prototypes of internal AI tools for claims handlers (Fernway is a made-up name)",
+  "scripts": {
+    "test": "echo \"Set the run folder in CLAUDE.md, then point this at its build/ checks\""
+  },
+  "devDependencies": {
+    "playwright": "^1.49.0"
+  }
+}
