@@ -1,0 +1,590 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Overrides · Fernway</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--text:#343a40;--head:#212529;--muted:#6c757d;--line:#e3e6ea;--bg:#f8f9fa;--brand:#3f51b5;
+ --good:#1e7a46;--good-tint:#e8f5ee;--bad:#b42318;--bad-tint:#fdecea;--warn:#8a5a00;--warn-tint:#fff4db;--warn-line:#f2d08a;--ai:#6d3fb8;--ai-tint:#f3eefc;--chip:#eceef1}
+*{box-sizing:border-box}body{margin:0;font:13px/1.45 Inter,Arial,sans-serif;color:var(--text);background:var(--bg)}
+.app{display:grid;grid-template-columns:190px minmax(0,1fr);min-height:100vh}
+nav{background:#fff;border-right:1px solid var(--line);padding:16px 12px}
+.logo{display:flex;align-items:center;gap:8px;font-weight:700;color:var(--head);font-size:15px;margin:0 6px 22px}
+nav a{display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:6px;color:var(--text);text-decoration:none;margin-bottom:2px}
+nav a.on{background:var(--chip);color:var(--head);font-weight:600}
+nav svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.6;flex:none}
+main{padding:20px 28px 40px;max-width:1280px;min-width:0}
+.meta{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;font-size:12px;color:var(--muted);margin-bottom:14px}.meta b{color:var(--text);font-weight:500}
+.tag{display:inline-block;font-size:11px;font-weight:500;padding:1px 7px;border-radius:10px;background:var(--chip);color:var(--muted);vertical-align:middle}
+h1{font-size:22px;color:var(--head);margin:0}.sub{color:var(--muted);margin:2px 0 12px}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:16px}
+.tabs button{font:inherit;background:none;border:0;padding:8px 12px;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px;cursor:pointer}
+.tabs button.on{color:var(--head);font-weight:600;border-color:var(--head)}
+.kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:12px}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:8px;padding:12px 14px}
+.kpi .l{color:var(--muted);font-size:12px}.kpi .v{font-size:24px;font-weight:600;color:var(--head);margin-top:2px}.kpi .v.bad{color:var(--bad)}
+.kpi .s{font-size:12px;color:var(--text);margin-top:2px}.kpi .x{font-size:11.5px;color:var(--muted);margin-top:6px;border-top:1px dashed var(--line);padding-top:6px}
+.notice{display:flex;align-items:center;gap:10px;background:var(--warn-tint);border:1px solid var(--warn-line);color:var(--warn);border-radius:8px;padding:9px 12px;margin-bottom:12px}
+.notice .grow{flex:1}.notice.done{background:var(--good-tint);border-color:#b7dfc6;color:var(--good)}
+.btn{font:inherit;font-size:12px;padding:6px 11px;border-radius:6px;border:1px solid #cfd4da;background:#fff;color:var(--text);cursor:pointer;white-space:nowrap}
+.btn.primary{background:var(--brand);border-color:var(--brand);color:#fff;font-weight:600}
+.link{font:inherit;font-size:12px;background:none;border:0;color:var(--muted);text-decoration:underline;cursor:pointer;padding:0}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:4px 0 6px}.bar h2{font-size:15px;margin:0;color:var(--head)}
+select{font:inherit;font-size:12px;border:1px solid #cfd4da;border-radius:6px;padding:5px 8px;background:#fff;color:var(--text)}
+.legend{display:flex;flex-wrap:wrap;gap:4px 16px;font-size:11.5px;color:var(--muted);margin-bottom:8px}
+.legend i{font-style:normal}.sw{display:inline-block;width:8px;height:10px;border-radius:1px;vertical-align:-1px;margin-right:4px}
+.tbl{background:#fff;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.hd,.row{display:grid;grid-template-columns:24px minmax(180px,1.5fr) 118px 62px 76px 64px minmax(130px,1fr) 112px 196px;gap:8px;align-items:center;padding:9px 10px;border-bottom:1px solid var(--line)}
+.hd{font-weight:500;font-size:11.5px;color:var(--muted);background:#fbfbfc;padding:8px 10px}
+.row{cursor:pointer}.row:hover{background:#fbfbff}.row.open{background:#f7f8fd}
+.n{text-align:right;font-variant-numeric:tabular-nums}
+.rank{color:var(--muted)}.mname{color:var(--head);font-weight:500}.chev{color:var(--muted);font-size:10px;margin-right:5px;display:inline-block;transition:transform .15s}
+.row.open .chev{transform:rotate(90deg)}
+.step{display:inline-block;font-size:11px;color:var(--muted);border:1px solid var(--line);border-radius:10px;padding:0 7px;white-space:nowrap}
+.once{font-size:11px;color:var(--muted);margin-left:6px}
+.denied{color:var(--bad);font-weight:600}.zero{color:#adb5bd}
+.types{font-size:11.5px;color:var(--text);line-height:1.5}.types span{white-space:nowrap}
+.spark{display:flex;align-items:flex-end;gap:2px;height:22px}.spark i{display:block;width:6px;background:#9fa8da;border-radius:1px}
+.spark i.z{background:#e9ecef;height:2px!important}.spark i.after{background:var(--bad)}.spark i.fixline{width:1px;height:22px!important;background:var(--head);margin:0 1px}
+.st{font-size:12px;line-height:1.5}.st .hand,.st .calc{display:block;white-space:nowrap}.st .hand{color:var(--muted)}.st .calc.ok{color:var(--good)}.st .calc.back{color:var(--bad)}
+.mk{font-size:10px;font-weight:600;border-radius:3px;padding:0 4px;margin-right:5px;vertical-align:1px}.mk.h{background:var(--chip);color:var(--muted)}.mk.c{background:#e3e7f8;color:#2f3d8f}
+.detail{display:none;padding:6px 14px 14px 44px;background:#f7f8fd;border-bottom:1px solid var(--line)}.detail.open{display:grid;grid-template-columns:minmax(0,1fr) 290px;gap:16px;animation:fade .2s}
+@keyframes fade{from{opacity:0;transform:translateY(-3px)}to{opacity:1}}
+.dh{font-size:11.5px;color:var(--muted);margin:6px 0}
+.cl{display:grid;grid-template-columns:72px 200px 175px minmax(0,1fr) auto;gap:10px;align-items:center;padding:7px 10px;background:#fff;border:1px solid var(--line);border-radius:6px;margin-bottom:5px;font-size:12px}
+.cl .id{font-weight:600;color:var(--head)}.cl .t{color:var(--muted)}.cl .note{font-style:italic}.cl .after{color:var(--bad);font-size:11px;font-style:normal}
+.pill{font-size:11px;border-radius:10px;padding:1px 7px;white-space:nowrap;background:var(--chip);color:var(--text)}.pill.den{background:var(--bad-tint);color:var(--bad)}
+.side{background:#fff;border:1px solid var(--line);border-radius:8px;padding:12px;align-self:start;margin-top:24px}
+.ai{font-size:11px;font-weight:600;color:var(--ai);background:var(--ai-tint);border-radius:8px;padding:1px 7px}.conf{font-size:11px;color:var(--good);margin-left:4px}
+.side p{margin:8px 0 10px}.kv{display:grid;grid-template-columns:auto 1fr;gap:3px 10px;font-size:12px;margin-bottom:12px}.kv span:nth-child(odd){color:var(--muted)}
+.side .btn.primary{width:100%;padding:8px}.side .undo{margin-top:8px;text-align:center}
+.foot{color:var(--muted);font-size:12px;padding:9px 10px}
+.note-ai{font-size:11.5px;color:var(--muted);margin-top:10px}
+.simple{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.simple th,.simple td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left}.simple th{font-weight:500;font-size:11.5px;color:var(--muted);background:#fbfbfc}
+.modal-bg{position:fixed;inset:0;background:rgba(33,37,41,.35);display:none;align-items:flex-start;justify-content:center;padding:60px 16px;z-index:10;overflow:auto}
+.modal-bg.open{display:flex}.modal{background:#fff;border-radius:10px;width:min(560px,100%);padding:18px 20px;box-shadow:0 10px 30px rgba(0,0,0,.15)}
+.modal.wide{width:min(900px,100%)}.modal h3{margin:0 0 4px;color:var(--head);font-size:16px}.modal .s{color:var(--muted);margin-bottom:12px}
+.modal label{display:block;font-size:12px;color:var(--muted);margin:10px 0 4px}.modal input{font:inherit;width:100%;border:1px solid #cfd4da;border-radius:6px;padding:7px 9px}
+.modal .acts{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
+.warnline{margin-top:10px;font-size:12px;color:var(--warn);background:var(--warn-tint);border-radius:6px;padding:6px 9px;display:none}
+.rv{display:grid;grid-template-columns:72px minmax(0,1fr) 230px;gap:10px;align-items:center;border:1px solid var(--line);border-radius:6px;padding:8px 10px;margin-bottom:6px;font-size:12px}
+.rv.done{background:var(--good-tint);border-color:#b7dfc6}.rv select{width:100%}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--head);color:#fff;padding:8px 14px;border-radius:8px;font-size:12.5px;opacity:0;transition:opacity .25s;pointer-events:none;z-index:20}.toast.show{opacity:1}
+.flash{animation:flash 1.2s}@keyframes flash{0%{background:#e8f5ee}100%{background:transparent}}
+@media (max-width:1100px){.hd,.row{grid-template-columns:22px minmax(0,1fr) 64px 82px 70px 140px}.hd>:nth-child(3),.row>:nth-child(3),.hd>:nth-child(7),.row>:nth-child(7),.hd>:nth-child(8),.row>:nth-child(8){display:none}
+ .detail.open{grid-template-columns:1fr;padding-left:14px}.cl{grid-template-columns:72px 1fr;}.cl>:nth-child(n+3){grid-column:1/-1}}
+@media (max-width:760px){.app{grid-template-columns:1fr}nav{display:none}main{padding:16px}.kpis{grid-template-columns:1fr}
+ .hd{display:none}.row{grid-template-columns:22px minmax(0,1fr) auto;row-gap:2px}.row>:nth-child(4),.row>:nth-child(6){display:none}.row>:nth-child(9){grid-column:2/-1}
+ .notice{flex-wrap:wrap}.rv{grid-template-columns:1fr}.meta{grid-template-columns:1fr}}
+</style></head>
+<body>
+<div class="app">
+<nav>
+ <div class="logo"><svg width="22" height="22" viewBox="0 0 22 22" style="stroke:none"><rect x="2" y="2" width="18" height="18" rx="5" fill="#3f51b5"/><path d="M7 15 L11 7 L15 15" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M8.6 12h4.8" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>Fernway</div>
+ <a href="#"><svg viewBox="0 0 16 16"><rect x="2" y="2" width="12" height="12" rx="2"/><path d="M2 6h12"/></svg>Workspace</a>
+ <a href="#"><svg viewBox="0 0 16 16"><path d="M4 2h6l3 3v9H4z"/><path d="M6 8h5M6 11h5"/></svg>Claims</a>
+ <a href="#" class="on"><svg viewBox="0 0 16 16"><path d="M3 5h8l-2-2M13 11H5l2 2"/></svg>Overrides</a>
+ <a href="#"><svg viewBox="0 0 16 16"><path d="M3 13V8M8 13V3M13 13V6"/></svg>Reports</a>
+</nav>
+<main>
+ <div class="meta" id="header"><span>Team</span><b>Fernway claims</b><span>Users</span><b>The PM for the claims platform and the claims team leads</b><span>Job to be done</span><b>Decide what to ask engineering to fix next, and check each fix landed</b></div>
+ <h1 id="title">Overrides <span class="tag">Synthetic data</span></h1>
+ <div class="sub" id="range"></div>
+ <div class="tabs"><button data-tab="type">By claim type</button><button data-tab="mistake" class="on">By mistake <span class="tag">New</span></button></div>
+
+ <section id="tab-mistake">
+  <div class="kpis" id="kpis"></div>
+  <div class="notice" id="notice"></div>
+  <div class="bar"><h2>Mistakes, biggest first</h2><label>Rank by <select id="rankBy"><option value="gbp">£ at stake (default)</option><option value="denied">Valid claims denied first</option><option value="count">Overrides</option></select></label></div>
+  <div class="legend" id="legend"></div>
+  <div class="tbl" id="table"></div>
+  <div class="note-ai">In this prototype, keyword rules on the handler's note stand in for the AI that names each mistake, and the AI summaries are written for the demo. The two fixes shown at the start are sample entries. All claims are synthetic.</div>
+ </section>
+ <section id="tab-type" hidden>
+  <p class="sub">The view the team has today (assumed): where the AI gets overridden, but not why.</p>
+  <table class="simple" id="typeTable"></table>
+ </section>
+</main></div>
+
+<div class="modal-bg" id="fixModal"><div class="modal" role="dialog" aria-labelledby="fixTitle">
+ <h3 id="fixTitle">Record a fix</h3><div class="s" id="fixFor"></div>
+ <label for="fixDate">Date the fix shipped</label><input type="date" id="fixDate">
+ <label for="fixWhat">What changed (one line)</label><input id="fixWhat" placeholder="For example: the policy check now reads the schedule and endorsements">
+ <div class="warnline" id="fixWarn"></div>
+ <div class="acts"><button class="btn" data-close>Cancel</button><button class="btn primary" id="fixSave">Save fix</button></div>
+</div></div>
+
+<div class="modal-bg" id="reviewModal"><div class="modal wide" role="dialog" aria-labelledby="revTitle">
+ <h3 id="revTitle">Name the mistakes the AI couldn't</h3><div class="s" id="revProgress"></div>
+ <div id="revList"></div>
+ <div class="acts"><button class="btn primary" data-close>Done</button></div>
+</div></div>
+<div class="toast" id="toast"></div>
+
+<script type="text/csv" id="csv">
+claim_id,date_received,claim_type,claim_example,claimed_amount_gbp,ai_recommendation,ai_payout_gbp,handler_final_decision,final_payout_gbp,override_reason
+CLM-1001,2026-08-13,Commercial property,Break-in,15750,Approve,13428,Approve,13428,
+CLM-1002,2026-09-06,Motor,Car accident,4010,Flag for fraud review,0,Flag for fraud review,0,
+CLM-1003,2026-11-01,Gadget,Water damage,740,Deny,0,Deny,0,
+CLM-1004,2026-08-29,Motor,Van accident,4350,Approve,4208,Approve,4208,
+CLM-1005,2026-09-18,Pet,Vet bills,2090,Approve,1954,Approve,1954,
+CLM-1006,2026-10-15,Commercial property,Warehouse fire,5120,Approve,4418,Approve,4418,
+CLM-1007,2026-10-24,Pet,Vet bills,720,Approve,630,Approve,630,
+CLM-1008,2026-10-16,Pet,Vet bills,840,Approve,852,Approve,1193,missed a line item on the receipt
+CLM-1009,2026-08-30,Travel,Grounded flight,840,Deny,0,Deny,0,
+CLM-1010,2026-09-02,Pet,Vet bills,1510,Request info,0,Request info,0,
+CLM-1011,2026-09-29,Home,Storm damage,1680,Deny,0,Deny,0,
+CLM-1012,2026-10-29,Home,Accidental damage,3600,Flag for fraud review,0,Flag for fraud review,0,
+CLM-1013,2026-09-28,Commercial property,Flood,4710,Approve,4533,Approve,4533,
+CLM-1014,2026-08-12,Motor,Car accident,1150,Approve,1023,Approve,1023,
+CLM-1015,2026-08-14,Motor,Car accident,1600,Deny,0,Approve,1360,"covered under extension clause, AI said excluded"
+CLM-1016,2026-09-25,Motor,Car accident,1820,Approve,1769,Approve,1769,
+CLM-1017,2026-10-23,Motor,Car accident,3780,Approve,3636,Approve,3636,
+CLM-1018,2026-10-20,Home,Storm damage,3950,Deny,0,Approve,3555,"reported inside the 30 day window, ai said late"
+CLM-1019,2026-10-30,Pet,Vet bills,550,Flag for fraud review,0,Flag for fraud review,0,
+CLM-1020,2026-11-02,Motor,Car accident,2340,Flag for fraud review,0,Approve,2106,"genuine customer, flag not justified"
+CLM-1021,2026-08-13,Motor,Car accident,2210,Approve,2018,Approve,2018,
+CLM-1022,2026-08-25,Commercial property,Flood,10090,Approve,9373,Approve,9373,
+CLM-1023,2026-10-05,Commercial property,Warehouse fire,4070,Deny,0,Deny,0,
+CLM-1024,2026-09-24,Motor,Van accident,3700,Approve,3339,Approve,3339,
+CLM-1025,2026-09-25,Motor,Van accident,2030,Approve,1996,Approve,1996,
+CLM-1026,2026-10-30,Travel,Cancelled trip,1010,Request info,0,Request info,0,
+CLM-1027,2026-08-17,Travel,Cancelled trip,940,Approve,886,Approve,886,
+CLM-1028,2026-08-07,Travel,Lost baggage,90,Approve,80,Approve,80,
+CLM-1029,2026-08-08,Commercial property,Break-in,8660,Deny,0,Deny,0,
+CLM-1030,2026-11-10,Pet,Vet bills,1020,Approve,881,Approve,881,
+CLM-1031,2026-08-13,Pet,Vet bills,480,Approve,453,Approve,453,
+CLM-1032,2026-11-06,Gadget,Water damage,840,Deny,0,Deny,0,
+CLM-1033,2026-10-02,Home,Accidental damage,3150,Approve,3101,Approve,3101,
+CLM-1034,2026-11-08,Gadget,Stolen laptop,620,Approve,664,Approve,498,"ocr garbled the invoice, figures off"
+CLM-1035,2026-10-26,Pet,Vet bills,1910,Approve,1727,Approve,1727,
+CLM-1036,2026-10-26,Commercial property,Break-in,4450,Deny,0,Approve,3782,"cover applies, endorsement was added in march"
+CLM-1037,2026-10-10,Pet,Vet bills,1320,Approve,1154,Approve,1154,
+CLM-1038,2026-10-02,Home,Burst pipe,3170,Approve,3086,Approve,3086,
+CLM-1039,2026-10-27,Home,Burst pipe,1450,Approve,1297,Approve,1297,
+CLM-1040,2026-08-05,Motor,Car accident,2600,Approve,2419,Approve,2419,
+CLM-1041,2026-08-27,Pet,Vet bills,1820,Approve,1638,Request info,0,"missing photos, can't decide yet"
+CLM-1042,2026-10-27,Motor,Car accident,6180,Approve,5910,Approve,5910,
+CLM-1043,2026-08-11,Home,Burst pipe,2530,Approve,2436,Approve,2436,
+CLM-1044,2026-09-26,Travel,Medical abroad,2210,Request info,0,Request info,0,
+CLM-1045,2026-11-07,Motor,Van accident,3300,Request info,0,Request info,0,
+CLM-1046,2026-09-11,Travel,Medical abroad,1640,Approve,1460,Approve,1460,
+CLM-1047,2026-09-09,Motor,Van accident,4510,Approve,4062,Approve,4062,
+CLM-1048,2026-10-13,Pet,Vet bills,1390,Approve,1213,Approve,1213,
+CLM-1049,2026-09-11,Pet,Vet bills,240,Deny,0,Deny,0,
+CLM-1050,2026-08-07,Gadget,Stolen laptop,730,Approve,699,Approve,699,
+CLM-1051,2026-10-15,Motor,Van accident,1490,Approve,1341,Flag for fraud review,0,"red flag missed, claim made 3 days after inception"
+CLM-1052,2026-10-04,Home,Accidental damage,3770,Flag for fraud review,0,Approve,3393,"AI flagged repeat claimant, but separate incidents"
+CLM-1053,2026-08-05,Motor,Windscreen,550,Approve,479,Approve,479,
+CLM-1054,2026-09-25,Pet,Vet bills,820,Approve,698,Approve,698,
+CLM-1055,2026-08-07,Home,Storm damage,3080,Request info,0,Request info,0,
+CLM-1056,2026-08-20,Travel,Lost baggage,290,Request info,0,Approve,261,"customer already sent the receipt, AI asked again"
+CLM-1057,2026-10-16,Home,Burst pipe,2520,Approve,2413,Approve,2413,
+CLM-1058,2026-09-17,Home,Burst pipe,2140,Approve,1840,Approve,1840,
+CLM-1059,2026-11-02,Motor,Van accident,4700,Approve,4170,Approve,4170,
+CLM-1060,2026-10-12,Motor,Car accident,1010,Approve,979,Approve,979,
+CLM-1061,2026-08-19,Commercial property,Break-in,2180,Request info,0,Request info,0,
+CLM-1062,2026-09-29,Pet,Vet bills,1320,Request info,0,Request info,0,
+CLM-1063,2026-11-01,Motor,Car accident,1210,Approve,1089,Deny,0,AI applied wrong policy version
+CLM-1064,2026-10-25,Pet,Vet bills,320,Deny,0,Deny,0,
+CLM-1065,2026-08-16,Travel,Cancelled trip,1380,Approve,1349,Approve,1349,
+CLM-1066,2026-09-22,Travel,Cancelled trip,620,Approve,624,Approve,874,AI used the estimate not the final invoice
+CLM-1067,2026-09-15,Pet,Vet bills,640,Approve,614,Approve,614,
+CLM-1068,2026-10-04,Travel,Grounded flight,1030,Deny,0,Approve,876,wrong
+CLM-1069,2026-09-01,Home,Storm damage,2560,Approve,2523,Approve,2523,
+CLM-1070,2026-10-22,Travel,Cancelled trip,1160,Flag for fraud review,0,Flag for fraud review,0,
+CLM-1071,2026-08-25,Home,Burst pipe,1120,Request info,0,Approve,1008,"docs were in the email thread, AI didnt see them"
+CLM-1072,2026-08-09,Pet,Vet bills,1570,Approve,1510,Approve,1510,
+CLM-1073,2026-08-19,Pet,Vet bills,180,Deny,0,Deny,0,
+CLM-1074,2026-08-15,Travel,Grounded flight,650,Approve,641,Approve,641,
+CLM-1075,2026-11-04,Travel,Medical abroad,1730,Request info,0,Request info,0,
+CLM-1076,2026-10-18,Motor,Car accident,3170,Approve,2829,Approve,2829,
+CLM-1077,2026-08-07,Travel,Grounded flight,1480,Approve,1441,Approve,1441,
+CLM-1078,2026-11-04,Home,Accidental damage,2020,Approve,1827,Approve,1827,
+CLM-1079,2026-08-21,Travel,Cancelled trip,1020,Approve,918,Request info,0,changed after call
+CLM-1080,2026-09-06,Pet,Vet bills,1320,Approve,1173,Approve,1173,
+CLM-1081,2026-08-28,Pet,Vet bills,700,Request info,0,Request info,0,
+CLM-1082,2026-11-05,Home,Storm damage,1760,Request info,0,Request info,0,
+CLM-1083,2026-10-23,Home,Burst pipe,1200,Approve,1143,Approve,1143,
+CLM-1084,2026-08-28,Commercial property,Break-in,5620,Deny,0,Deny,0,
+CLM-1085,2026-08-03,Home,Accidental damage,3090,Deny,0,Deny,0,
+CLM-1086,2026-10-15,Motor,Van accident,3820,Approve,3438,Request info,0,"missing photos, can't decide yet"
+CLM-1087,2026-09-03,Gadget,Water damage,740,Approve,734,Approve,734,
+CLM-1088,2026-10-04,Motor,Car accident,1470,Approve,1519,Approve,911,"date on police report misread, it's the 14th not 4th"
+CLM-1089,2026-09-12,Home,Burst pipe,1750,Approve,1647,Approve,1647,
+CLM-1090,2026-10-27,Commercial property,Warehouse fire,7030,Approve,6951,Approve,6951,
+CLM-1091,2026-08-29,Home,Burst pipe,1620,Approve,1570,Approve,1570,
+CLM-1092,2026-10-21,Motor,Van accident,6790,Approve,6534,Approve,6534,
+CLM-1093,2026-08-07,Motor,Van accident,3500,Approve,3004,Approve,3004,
+CLM-1094,2026-08-31,Pet,Vet bills,1170,Approve,1215,Approve,1701,per team lead
+CLM-1095,2026-08-12,Pet,Vet bills,770,Deny,0,Deny,0,
+CLM-1096,2026-08-25,Commercial property,Warehouse fire,1560,Approve,1451,Approve,1451,
+CLM-1097,2026-08-24,Commercial property,Flood,6990,Deny,0,Approve,5942,"covered under extension clause, AI said excluded"
+CLM-1098,2026-10-10,Motor,Windscreen,550,Approve,503,Approve,503,
+CLM-1099,2026-08-06,Commercial property,Flood,4520,Approve,4236,Approve,4236,
+CLM-1100,2026-11-08,Home,Storm damage,3560,Approve,3318,Approve,3318,
+CLM-1101,2026-09-16,Motor,Windscreen,770,Approve,729,Approve,729,
+CLM-1102,2026-09-12,Motor,Van accident,4240,Approve,4215,Approve,4215,
+CLM-1103,2026-10-14,Travel,Lost baggage,100,Approve,95,Approve,95,
+CLM-1104,2026-10-18,Gadget,Stolen laptop,760,Approve,650,Approve,650,
+CLM-1105,2026-10-13,Motor,Car accident,1280,Approve,1307,Approve,784,"wrong amount pulled from quote, VAT included twice"
+CLM-1106,2026-09-11,Commercial property,Flood,2720,Deny,0,Deny,0,
+CLM-1107,2026-10-17,Commercial property,Break-in,3620,Approve,3467,Approve,3467,
+CLM-1108,2026-08-25,Motor,Van accident,3200,Approve,3044,Approve,3044,
+CLM-1109,2026-09-11,Motor,Van accident,4190,Approve,4349,Approve,2609,AI read repair quote total as £4609 but it's £3771 on page 2
+CLM-1110,2026-09-27,Pet,Vet bills,130,Approve,113,Approve,113,
+CLM-1111,2026-11-07,Motor,Car accident,3610,Approve,3508,Approve,3508,
+CLM-1112,2026-10-30,Pet,Vet bills,1330,Approve,1209,Approve,1209,
+CLM-1113,2026-11-01,Motor,Car accident,900,Request info,0,Request info,0,
+CLM-1114,2026-10-22,Home,Storm damage,3010,Approve,2793,Approve,2793,
+CLM-1115,2026-08-23,Travel,Medical abroad,2150,Deny,0,Deny,0,
+CLM-1116,2026-10-23,Gadget,Stolen laptop,560,Deny,0,Approve,504,"reported inside the 30 day window, AI said late"
+CLM-1117,2026-08-03,Motor,Van accident,2430,Approve,2382,Approve,2382,
+CLM-1118,2026-09-24,Commercial property,Warehouse fire,2020,Deny,0,Approve,1818,waiting period already passed
+CLM-1119,2026-11-10,Pet,Vet bills,120,Approve,111,Approve,111,
+CLM-1120,2026-08-28,Home,Burst pipe,2430,Approve,2236,Approve,2236,
+CLM-1121,2026-08-31,Travel,Lost baggage,260,Approve,254,Approve,254,
+CLM-1122,2026-09-28,Home,Accidental damage,1650,Approve,1640,Approve,1640,
+CLM-1123,2026-10-09,Gadget,Cracked phone screen,840,Approve,814,Approve,814,
+CLM-1124,2026-09-23,Travel,Lost baggage,270,Approve,263,Approve,263,
+CLM-1125,2026-10-16,Travel,Grounded flight,620,Deny,0,Deny,0,
+CLM-1126,2026-08-28,Motor,Car accident,2380,Approve,2142,Deny,0,"exclusion 4.2 applies here, ai missed it"
+CLM-1127,2026-10-22,Motor,Car accident,5520,Approve,5174,Approve,5174,
+CLM-1128,2026-08-07,Home,Burst pipe,1570,Approve,1495,Approve,1495,
+CLM-1129,2026-08-04,Motor,Van accident,3770,Approve,3735,Approve,3735,
+CLM-1130,2026-09-30,Travel,Grounded flight,1010,Approve,906,Approve,906,
+CLM-1131,2026-08-03,Pet,Vet bills,750,Approve,675,Deny,0,changed after call
+CLM-1132,2026-10-11,Home,Storm damage,2470,Deny,0,Deny,0,
+CLM-1133,2026-10-28,Home,Accidental damage,1180,Approve,1120,Approve,1120,
+CLM-1134,2026-09-07,Motor,Van accident,1460,Flag for fraud review,0,Approve,1314,per team lead
+CLM-1135,2026-08-12,Commercial property,Flood,4640,Approve,4168,Approve,4168,
+CLM-1136,2026-09-22,Travel,Lost baggage,280,Approve,263,Approve,263,
+CLM-1137,2026-09-04,Home,Storm damage,3300,Approve,3169,Approve,3803,AI used the estimate not the final invoice
+CLM-1138,2026-10-09,Commercial property,Break-in,4770,Approve,5179,Approve,3107,"date on repair quote misread, it's the 14th not 4th"
+CLM-1139,2026-11-03,Home,Storm damage,2150,Deny,0,Deny,0,
+CLM-1140,2026-09-08,Home,Storm damage,1050,Approve,1021,Approve,1021,
+CLM-1141,2026-10-02,Motor,Van accident,3340,Approve,3046,Approve,3046,
+CLM-1142,2026-09-22,Motor,Van accident,1840,Deny,0,Deny,0,
+CLM-1143,2026-08-04,Motor,Van accident,1970,Request info,0,Request info,0,
+CLM-1144,2026-09-06,Motor,Car accident,3210,Approve,2883,Approve,2883,
+CLM-1145,2026-08-14,Pet,Vet bills,300,Request info,0,Request info,0,
+CLM-1146,2026-09-12,Motor,Car accident,970,Approve,911,Approve,911,
+CLM-1147,2026-09-26,Motor,Car accident,6930,Approve,6302,Approve,6302,
+CLM-1148,2026-10-06,Motor,Van accident,6850,Request info,0,Request info,0,
+CLM-1149,2026-08-30,Commercial property,Warehouse fire,4970,Approve,4473,Deny,0,"wording says accidental damage only, this is wear and tear"
+CLM-1150,2026-08-05,Travel,Lost baggage,240,Deny,0,Deny,0,
+CLM-1151,2026-09-06,Home,Accidental damage,3200,Approve,3159,Approve,1895,AI read receipt total as £3520 but it's £2880 on page 2
+CLM-1152,2026-11-09,Home,Burst pipe,1340,Approve,1256,Approve,1256,
+CLM-1153,2026-09-09,Motor,Car accident,5720,Deny,0,Deny,0,
+CLM-1154,2026-10-02,Pet,Vet bills,440,Flag for fraud review,0,Flag for fraud review,0,
+CLM-1155,2026-11-05,Travel,Cancelled trip,620,Approve,611,Approve,611,
+CLM-1156,2026-09-14,Pet,Vet bills,470,Approve,496,Approve,422,see notes
+CLM-1157,2026-09-29,Gadget,Stolen laptop,780,Approve,736,Approve,736,
+CLM-1158,2026-08-12,Pet,Vet bills,670,Approve,580,Approve,580,
+CLM-1159,2026-08-14,Motor,Car accident,5150,Request info,0,Request info,0,
+CLM-1160,2026-10-31,Motor,Van accident,2860,Approve,2494,Approve,2494,
+CLM-1161,2026-11-11,Home,Burst pipe,1010,Request info,0,Request info,0,
+CLM-1162,2026-09-27,Travel,Lost baggage,190,Approve,169,Approve,169,
+CLM-1163,2026-09-17,Motor,Van accident,2070,Deny,0,Deny,0,
+CLM-1164,2026-11-02,Travel,Lost baggage,230,Request info,0,Request info,0,
+CLM-1165,2026-10-02,Home,Storm damage,2130,Approve,2030,Approve,2030,
+CLM-1166,2026-09-13,Travel,Grounded flight,1180,Flag for fraud review,0,Flag for fraud review,0,
+CLM-1167,2026-08-06,Motor,Windscreen,650,Approve,565,Approve,565,
+CLM-1168,2026-08-21,Motor,Van accident,4310,Approve,3761,Approve,3761,
+CLM-1169,2026-08-16,Motor,Windscreen,630,Request info,0,Request info,0,
+CLM-1170,2026-08-20,Motor,Windscreen,540,Approve,460,Approve,460,
+CLM-1171,2026-08-25,Motor,Car accident,4720,Approve,4576,Approve,4576,
+CLM-1172,2026-09-10,Pet,Vet bills,1260,Deny,0,Deny,0,
+CLM-1173,2026-10-05,Pet,Vet bills,830,Approve,773,Approve,773,
+CLM-1174,2026-11-04,Home,Burst pipe,3910,Approve,3613,Approve,3613,
+CLM-1175,2026-08-21,Motor,Van accident,4580,Approve,4226,Approve,4226,
+CLM-1176,2026-10-16,Motor,Van accident,1750,Deny,0,Deny,0,
+CLM-1177,2026-11-08,Pet,Vet bills,1740,Approve,1732,Approve,1732,
+CLM-1178,2026-08-03,Commercial property,Warehouse fire,1500,Flag for fraud review,0,Approve,1350,"AI flagged repeat claimant, but separate incidents"
+CLM-1179,2026-10-11,Travel,Grounded flight,860,Approve,746,Approve,746,
+CLM-1180,2026-10-10,Home,Storm damage,2190,Approve,1983,Approve,1686,"ocr garbled the repair quote, figures off"
+CLM-1181,2026-08-24,Motor,Van accident,2770,Flag for fraud review,0,Flag for fraud review,0,
+CLM-1182,2026-08-16,Home,Storm damage,3390,Deny,0,Approve,2882,"cover applies, endorsement was added in march"
+CLM-1183,2026-10-22,Pet,Vet bills,690,Approve,701,Approve,841,"wrong amount pulled from quote, vat included twice"
+CLM-1184,2026-08-19,Home,Burst pipe,1140,Approve,1038,Approve,1038,
+CLM-1185,2026-09-27,Home,Storm damage,3210,Approve,3059,Approve,3059,
+CLM-1186,2026-08-10,Pet,Vet bills,800,Approve,722,Approve,722,
+CLM-1187,2026-09-14,Travel,Lost baggage,470,Approve,423,Approve,423,
+CLM-1188,2026-10-31,Commercial property,Break-in,4690,Approve,4436,Approve,4436,
+CLM-1189,2026-10-04,Motor,Windscreen,360,Approve,345,Approve,345,
+CLM-1190,2026-11-02,Motor,Car accident,3300,Approve,3010,Approve,3010,
+CLM-1191,2026-09-30,Motor,Car accident,2330,Approve,2138,Approve,1817,"date on repair quote misread, it's the 14th not 4th"
+CLM-1192,2026-10-03,Commercial property,Flood,4810,Approve,4559,Approve,4559,
+CLM-1193,2026-10-22,Gadget,Water damage,450,Approve,406,Approve,406,
+CLM-1194,2026-09-14,Commercial property,Flood,7080,Deny,0,Deny,0,
+CLM-1195,2026-08-05,Motor,Windscreen,750,Approve,681,Approve,681,
+CLM-1196,2026-09-30,Travel,Medical abroad,1920,Approve,1655,Approve,1655,
+CLM-1197,2026-09-21,Home,Storm damage,1060,Deny,0,Deny,0,
+CLM-1198,2026-08-10,Home,Accidental damage,2350,Flag for fraud review,0,Flag for fraud review,0,
+CLM-1199,2026-08-18,Pet,Vet bills,390,Approve,357,Approve,357,
+CLM-1200,2026-08-04,Commercial property,Break-in,12690,Approve,12270,Approve,12270,
+CLM-1201,2026-09-25,Commercial property,Flood,13050,Deny,0,Deny,0,
+CLM-1202,2026-11-07,Travel,Grounded flight,590,Approve,531,Deny,0,"exclusion 4.2 applies here, AI missed it"
+CLM-1203,2026-10-11,Pet,Vet bills,330,Approve,301,Approve,301,
+CLM-1204,2026-09-05,Pet,Vet bills,1040,Approve,933,Approve,933,
+CLM-1205,2026-10-14,Pet,Vet bills,1880,Flag for fraud review,0,Flag for fraud review,0,
+CLM-1206,2026-09-15,Motor,Van accident,3930,Approve,3819,Approve,3819,
+CLM-1207,2026-09-14,Motor,Van accident,2100,Approve,2069,Approve,2069,
+CLM-1208,2026-10-21,Commercial property,Break-in,2640,Approve,2487,Approve,2487,
+CLM-1209,2026-11-05,Motor,Car accident,1050,Approve,1108,Approve,942,ai used the estimate not the final invoice
+CLM-1210,2026-09-11,Home,Accidental damage,2170,Deny,0,Approve,1953,"dates mixed up, loss date is after inception"
+CLM-1211,2026-11-01,Commercial property,Warehouse fire,4740,Approve,5072,Approve,3043,"ocr garbled the repair quote, figures off"
+CLM-1212,2026-09-25,Commercial property,Warehouse fire,2500,Deny,0,Deny,0,
+CLM-1213,2026-09-02,Travel,Cancelled trip,1330,Approve,1231,Approve,1231,
+CLM-1214,2026-08-07,Motor,Car accident,4350,Approve,3833,Approve,3833,
+CLM-1215,2026-08-13,Travel,Grounded flight,620,Flag for fraud review,0,Flag for fraud review,0,
+CLM-1216,2026-10-06,Commercial property,Break-in,4000,Approve,3627,Approve,3627,
+CLM-1217,2026-10-05,Pet,Vet bills,540,Approve,500,Approve,500,
+CLM-1218,2026-10-15,Motor,Van accident,1230,Approve,1217,Approve,1217,
+CLM-1219,2026-10-26,Gadget,Water damage,720,Approve,648,Deny,0,AI applied wrong policy version
+CLM-1220,2026-08-18,Motor,Car accident,3670,Approve,3303,Request info,0,"no second quote, needed for this value"
+CLM-1221,2026-09-06,Pet,Vet bills,1380,Approve,1294,Approve,1294,
+CLM-1222,2026-08-26,Commercial property,Flood,2600,Approve,2460,Approve,2460,
+CLM-1223,2026-10-18,Motor,Car accident,1550,Approve,1357,Approve,1357,
+CLM-1224,2026-10-06,Home,Storm damage,940,Approve,876,Approve,876,
+CLM-1225,2026-10-18,Commercial property,Warehouse fire,4930,Approve,4602,Approve,4602,
+CLM-1226,2026-08-22,Home,Storm damage,2550,Approve,2452,Approve,2452,
+CLM-1227,2026-09-11,Motor,Van accident,4480,Approve,4083,Approve,4083,
+CLM-1228,2026-08-22,Home,Burst pipe,3660,Approve,3278,Approve,3278,
+CLM-1229,2026-10-13,Pet,Vet bills,850,Deny,0,Deny,0,
+CLM-1230,2026-08-04,Travel,Medical abroad,2010,Deny,0,Approve,1708,disagree w AI
+CLM-1231,2026-10-25,Travel,Lost baggage,90,Flag for fraud review,0,Flag for fraud review,0,
+CLM-1232,2026-09-18,Home,Accidental damage,1770,Approve,1740,Approve,1740,
+CLM-1233,2026-10-19,Commercial property,Flood,4110,Approve,3522,Approve,3522,
+CLM-1234,2026-09-28,Home,Storm damage,2820,Approve,2553,Approve,2553,
+CLM-1235,2026-08-20,Home,Accidental damage,2910,Approve,2619,Deny,0,AI applied wrong policy version
+CLM-1236,2026-09-19,Pet,Vet bills,330,Request info,0,Request info,0,
+CLM-1237,2026-08-13,Pet,Vet bills,310,Deny,0,Approve,264,excess not applied correctly
+CLM-1238,2026-09-02,Motor,Van accident,5080,Approve,4331,Approve,4331,
+CLM-1239,2026-09-21,Commercial property,Break-in,4790,Approve,4382,Approve,4382,
+CLM-1240,2026-09-24,Home,Storm damage,2500,Deny,0,Deny,0,
+CLM-1241,2026-09-28,Motor,Car accident,1860,Request info,0,Request info,0,
+CLM-1242,2026-09-13,Home,Accidental damage,1270,Approve,1341,Approve,1006,AI read repair quote total as £1397 but it's £1143 on page 2
+CLM-1243,2026-10-16,Pet,Vet bills,210,Approve,201,Approve,201,
+CLM-1244,2026-08-25,Travel,Lost baggage,430,Approve,428,Approve,428,
+CLM-1245,2026-09-24,Pet,Vet bills,1500,Approve,1291,Approve,1291,
+CLM-1246,2026-09-22,Home,Storm damage,1980,Approve,1844,Approve,1844,
+CLM-1247,2026-08-13,Home,Accidental damage,2040,Approve,1821,Approve,1821,
+CLM-1248,2026-08-13,Travel,Grounded flight,630,Deny,0,Approve,536,"covered under extension clause, AI said excluded"
+CLM-1249,2026-10-14,Pet,Vet bills,450,Approve,449,Approve,449,
+CLM-1250,2026-09-21,Home,Storm damage,2840,Approve,2745,Approve,2745,
+CLM-1251,2026-08-10,Home,Storm damage,2360,Approve,2293,Approve,2293,
+CLM-1252,2026-09-13,Motor,Van accident,1720,Request info,0,Request info,0,
+CLM-1253,2026-10-28,Home,Burst pipe,2310,Approve,2014,Approve,2014,
+CLM-1254,2026-09-16,Pet,Vet bills,560,Approve,521,Approve,521,
+CLM-1255,2026-09-08,Motor,Car accident,6340,Deny,0,Deny,0,
+CLM-1256,2026-10-13,Travel,Medical abroad,2190,Approve,2098,Approve,2098,
+CLM-1257,2026-11-07,Motor,Car accident,1600,Flag for fraud review,0,Flag for fraud review,0,
+CLM-1258,2026-08-29,Motor,Van accident,4170,Approve,4153,Approve,4153,
+CLM-1259,2026-08-05,Gadget,Cracked phone screen,670,Approve,628,Approve,628,
+CLM-1260,2026-10-30,Home,Accidental damage,910,Approve,791,Approve,791,
+CLM-1261,2026-09-12,Motor,Car accident,4130,Approve,3915,Approve,3915,
+CLM-1262,2026-10-13,Commercial property,Warehouse fire,3820,Deny,0,Deny,0,
+CLM-1263,2026-09-22,Home,Accidental damage,1500,Approve,1569,Approve,1334,AI read receipt total as £1650 but it's £1350 on page 2
+CLM-1264,2026-09-05,Pet,Vet bills,380,Deny,0,Deny,0,
+CLM-1265,2026-10-02,Motor,Windscreen,580,Approve,555,Approve,555,
+CLM-1266,2026-08-06,Motor,Van accident,4760,Approve,4664,Approve,4664,
+CLM-1267,2026-10-27,Motor,Windscreen,440,Approve,424,Approve,424,
+CLM-1268,2026-08-22,Motor,Car accident,3400,Approve,2973,Approve,2973,
+CLM-1269,2026-08-24,Motor,Car accident,3290,Approve,2871,Approve,2871,
+CLM-1270,2026-10-08,Pet,Vet bills,930,Flag for fraud review,0,Flag for fraud review,0,
+CLM-1271,2026-08-18,Motor,Van accident,2300,Approve,2516,Approve,3019,"wrong amount pulled from quote, VAT included twice"
+CLM-1272,2026-11-01,Pet,Vet bills,1520,Approve,1437,Approve,1437,
+CLM-1273,2026-10-30,Motor,Windscreen,530,Approve,477,Approve,477,
+CLM-1274,2026-09-03,Motor,Car accident,3730,Deny,0,Deny,0,
+CLM-1275,2026-10-26,Motor,Car accident,2880,Approve,2592,Deny,0,policy limit for this section is lower than AI used
+CLM-1276,2026-09-15,Motor,Car accident,4170,Approve,3951,Approve,3951,
+CLM-1277,2026-10-29,Pet,Vet bills,680,Deny,0,Approve,612,see notes
+CLM-1278,2026-10-06,Pet,Vet bills,640,Flag for fraud review,0,Approve,576,"pattern flag was a coincidence, spoke to customer"
+CLM-1279,2026-09-24,Motor,Van accident,4610,Approve,4470,Approve,4470,
+CLM-1280,2026-08-26,Commercial property,Flood,5280,Request info,0,Request info,0,
+CLM-1281,2026-08-17,Commercial property,Flood,4260,Approve,4258,Approve,4258,
+CLM-1282,2026-11-01,Home,Accidental damage,1420,Approve,1320,Approve,1320,
+CLM-1283,2026-08-13,Motor,Car accident,1960,Approve,1796,Approve,1796,
+CLM-1284,2026-10-01,Home,Storm damage,3180,Approve,2898,Approve,2898,
+CLM-1285,2026-08-09,Motor,Van accident,5280,Approve,5002,Approve,5002,
+CLM-1286,2026-08-26,Home,Storm damage,1990,Approve,1963,Approve,1963,
+CLM-1287,2026-08-16,Motor,Windscreen,400,Deny,0,Deny,0,
+CLM-1288,2026-08-24,Motor,Windscreen,780,Request info,0,Request info,0,
+CLM-1289,2026-08-17,Motor,Car accident,3060,Approve,2695,Approve,2695,
+CLM-1290,2026-09-03,Travel,Medical abroad,2170,Approve,2126,Approve,2551,"ocr garbled the invoice, figures off"
+CLM-1291,2026-08-20,Commercial property,Flood,9870,Approve,9357,Approve,9357,
+CLM-1292,2026-11-11,Motor,Windscreen,760,Approve,722,Approve,722,
+CLM-1293,2026-08-15,Motor,Van accident,3250,Approve,2785,Approve,2785,
+CLM-1294,2026-10-22,Home,Burst pipe,1770,Approve,1643,Approve,1643,
+CLM-1295,2026-08-06,Pet,Vet bills,2140,Deny,0,Approve,1819,
+CLM-1296,2026-10-18,Pet,Vet bills,530,Approve,492,Approve,492,
+CLM-1297,2026-11-08,Pet,Vet bills,1530,Approve,1336,Approve,1336,
+CLM-1298,2026-08-21,Motor,Van accident,4130,Request info,0,Approve,3717,disagree w AI
+CLM-1299,2026-09-29,Home,Storm damage,1800,Approve,1760,Approve,1760,
+CLM-1300,2026-09-06,Travel,Cancelled trip,760,Approve,738,Approve,738,
+</script>
+
+<script id="calc">
+// Calculations, in plain functions the tests import. SYNTHETIC data.
+const MISTAKES = [
+ {id:'cover', step:'Policy check', name:'Missed cover on the policy schedule', desc:'An extension clause or endorsement adds cover', re:/extension clause|endorsement/,
+  summary:'The AI checks the main policy wording but not the schedule, so cover added by an extension clause or a later endorsement is missed and the claim is denied as excluded.'},
+ {id:'window', step:'Policy check', name:'Time window or date read wrong', desc:'Reporting window, waiting period or loss date', re:/30 day|waiting period|dates mixed/,
+  summary:'The AI compares the wrong dates when it checks a reporting window or waiting period, so claims made in time are denied as late.'},
+ {id:'version', step:'Policy check', name:'Wrong policy version applied', desc:'An older or newer policy than the one in force', re:/policy version/,
+  summary:'The AI uses a policy version other than the one in force on the date of loss.'},
+ {id:'exclusion', step:'Policy check', name:'Exclusion missed', desc:'An exclusion in the wording applies', re:/exclusion 4\.2|accidental damage only/,
+  summary:'The AI approves claims that an exclusion in the wording rules out, such as wear and tear on an accidental damage policy.'},
+ {id:'limit', step:'Policy check', name:'Limit or excess applied wrong', desc:'Section limit or excess', re:/policy limit|excess not applied/,
+  summary:'The AI applies the wrong section limit or excess when it works out what the policy covers.'},
+ {id:'flag', step:'Fraud check', name:'Fraud flag on a genuine claim', desc:'Repeat claimant or pattern flag, cleared by the handler', re:/repeat claimant|pattern flag|flag not justified/,
+  summary:'The fraud check flags repeat claimants and patterns without checking whether the incidents are separate, so genuine claims are held up.'},
+ {id:'redflag', step:'Fraud check', name:'Fraud red flag missed', desc:'A warning sign the handler spotted', re:/red flag missed/,
+  summary:'The fraud check missed a warning sign, such as a claim made days after the policy started.'},
+ {id:'page2', step:'Document reading', name:'Total read from the wrong page', desc:'Multi-page quotes and receipts', re:/on page 2/,
+  summary:'On quotes and receipts longer than one page, the AI takes a figure from the first page instead of the final total.'},
+ {id:'estimate', step:'Document reading', name:'Estimate used instead of the final invoice', desc:'Both documents on the claim', re:/estimate not the final/,
+  summary:'When a claim has both an estimate and a final invoice, the AI uses the estimate.'},
+ {id:'vat', step:'Document reading', name:'VAT counted twice', desc:'Quote totals that already include VAT', re:/vat included twice/,
+  summary:'The AI adds VAT to totals that already include it.'},
+ {id:'date', step:'Document reading', name:'Date on a document misread', desc:'Police reports and repair quotes', re:/date on .* misread/,
+  summary:'The AI misreads day numbers on reports and quotes, for example the 14th as the 4th.'},
+ {id:'ocr', step:'Document reading', name:'Scan or photo garbled', desc:'Poor scans and phone photos', re:/ocr garbled/,
+  summary:'Text read from poor scans and phone photos comes out garbled, so the figures are wrong.'},
+ {id:'lineitem', step:'Document reading', name:'Line item missed', desc:'A line on a receipt left out', re:/line item/,
+  summary:'The AI leaves out a line on a receipt when it adds up the claim.'},
+ {id:'asked', step:'Documents requested', name:'Asked for documents already sent', desc:'They were on the claim or in the email thread', re:/already sent|email thread/,
+  summary:'The AI asks the customer for documents that are already on the claim or in the email thread, which delays a valid claim.'},
+ {id:'missing', step:'Documents requested', name:"Didn't ask for missing documents", desc:'Photos or a second quote needed first', re:/missing photos|second quote/,
+  summary:'The AI recommends paying before documents the claim needs, such as photos or a second quote, are in.'},
+];
+const VAGUE = ['', 'wrong', 'see notes', 'per team lead', 'disagree w ai', 'changed after call'];
+
+function parseCSV(text) {
+  const lines = text.trim().split('\n'), cols = lines[0].split(',');
+  return lines.slice(1).map(line => { const v = []; let cur = '', q = false;
+    for (const ch of line) { if (ch === '"') q = !q; else if (ch === ',' && !q) { v.push(cur); cur = ''; } else cur += ch; } v.push(cur);
+    const r = {}; cols.forEach((c, i) => r[c] = v[i] === undefined ? '' : v[i]);
+    ['claimed_amount_gbp', 'ai_payout_gbp', 'final_payout_gbp'].forEach(k => r[k] = +r[k]); return r; });
+}
+// An override: the handler's decision differs, or the same decision with a different payout.
+// £ at stake: what the claim would have cost if the handler had followed the AI.
+function enrich(rows) {
+  return rows.map(r => {
+    const decision = r.ai_recommendation !== r.handler_final_decision, amount = !decision && r.ai_payout_gbp !== r.final_payout_gbp;
+    let kind = null, gbp = 0;
+    if (amount) { kind = r.ai_payout_gbp > r.final_payout_gbp ? 'Paid too much' : 'Paid too little'; gbp = Math.abs(r.ai_payout_gbp - r.final_payout_gbp); }
+    else if (decision) {
+      const a = r.ai_recommendation, h = r.handler_final_decision;
+      if (a === 'Deny' && h === 'Approve') { kind = 'Valid claim denied'; gbp = r.final_payout_gbp; }
+      else if (a === 'Approve' && h === 'Deny') { kind = 'Paid a claim it should deny'; gbp = r.ai_payout_gbp; }
+      else if (a === 'Flag for fraud review' && h === 'Approve') { kind = 'Delayed by a fraud flag'; gbp = r.final_payout_gbp; }
+      else if (a === 'Request info' && h === 'Approve') { kind = 'Delayed by an information request'; gbp = r.final_payout_gbp; }
+      else { kind = 'Approved before checks'; gbp = 0; }
+    }
+    const note = (r.override_reason || '').trim(), low = note.toLowerCase();
+    const m = kind && !VAGUE.includes(low) ? MISTAKES.find(x => x.re.test(low)) : null;
+    return Object.assign({}, r, { override: !!kind, kind, gbp, note, mistake: m ? m.id : (kind ? null : undefined) });
+  });
+}
+const DIR = { 'Paid too much': 'over', 'Paid a claim it should deny': 'over', 'Paid too little': 'under', 'Valid claim denied': 'under', 'Delayed by a fraud flag': 'delay', 'Delayed by an information request': 'delay', 'Approved before checks': 'none' };
+function totals(rows) {
+  const o = rows.filter(r => r.override), sum = f => o.filter(f).reduce((s, r) => s + r.gbp, 0);
+  return { claims: rows.length, overrides: o.length, rate: o.length / rows.length, gbp: sum(() => true),
+    over: sum(r => DIR[r.kind] === 'over'), under: sum(r => DIR[r.kind] === 'under'), delay: sum(r => DIR[r.kind] === 'delay'),
+    delayFlag: sum(r => r.kind === 'Delayed by a fraud flag'), delayInfo: sum(r => r.kind === 'Delayed by an information request'),
+    denied: o.filter(r => r.kind === 'Valid claim denied').length, deniedGbp: sum(r => r.kind === 'Valid claim denied'),
+    unnamed: o.filter(r => !r.mistake).length, unnamedGbp: sum(r => !r.mistake) };
+}
+const DAY = 864e5, iso = d => new Date(d + 'T00:00:00Z');
+function weeks(rows) { const ds = rows.map(r => r.date_received).sort(); const start = iso(ds[0]); start.setUTCDate(start.getUTCDate() - ((start.getUTCDay() + 6) % 7));
+  const end = iso(ds[ds.length - 1]); return { start, n: Math.floor((end - start) / (7 * DAY)) + 1, asOf: ds[ds.length - 1] }; }
+// fixes: {mistakeId: 'YYYY-MM-DD'}, entered by hand. Repeats: overrides of that mistake received after the fix date, counted by code.
+function mistakes(rows, fixes, rankBy) {
+  const W = weeks(rows), o = rows.filter(r => r.override && r.mistake);
+  const list = MISTAKES.map(m => { const rs = o.filter(r => r.mistake === m.id); if (!rs.length) return null;
+    const fix = fixes[m.id] || null, types = {}; rs.forEach(r => types[r.claim_type] = (types[r.claim_type] || 0) + 1);
+    const bars = Array(W.n).fill(0); rs.forEach(r => bars[Math.floor((iso(r.date_received) - W.start) / (7 * DAY))]++);
+    const repeats = fix ? rs.filter(r => r.date_received > fix).length : null;
+    return { id: m.id, name: m.name, desc: m.desc, step: m.step, summary: m.summary, rows: rs.slice().sort((a, b) => b.gbp - a.gbp),
+      count: rs.length, gbp: rs.reduce((s, r) => s + r.gbp, 0), denied: rs.filter(r => r.kind === 'Valid claim denied').length,
+      types: Object.entries(types).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])), bars,
+      first: rs.map(r => r.date_received).sort()[0], last: rs.map(r => r.date_received).sort().pop(),
+      fix, repeats, weeksSince: fix ? Math.floor((iso(W.asOf) - iso(fix)) / (7 * DAY)) : null,
+      fixWeek: fix ? Math.floor((iso(fix) - W.start) / (7 * DAY)) : null }; }).filter(Boolean);
+  const key = { gbp: m => [m.gbp, m.count], denied: m => [m.denied, m.gbp], count: m => [m.count, m.gbp] }[rankBy || 'gbp'];
+  return list.sort((a, b) => { const x = key(a), y = key(b); return y[0] - x[0] || y[1] - x[1]; });
+}
+function byType(rows) { const t = {}; rows.forEach(r => { t[r.claim_type] = t[r.claim_type] || { claims: 0, overrides: 0 }; t[r.claim_type].claims++; if (r.override) t[r.claim_type].overrides++; });
+  return Object.entries(t).map(([type, v]) => ({ type, ...v, rate: v.overrides / v.claims })).sort((a, b) => b.rate - a.rate); }
+function rename(rows, claimId, mistakeId) { return rows.map(r => r.claim_id === claimId ? Object.assign({}, r, { mistake: mistakeId, renamedByLead: true }) : r); }
+if (typeof module !== 'undefined') module.exports = { MISTAKES, parseCSV, enrich, totals, mistakes, weeks, byType, rename };
+</script>
+
+<script>
+const $ = s => document.querySelector(s), gbp = n => '£' + Math.round(n).toLocaleString('en-GB'), pct = x => (x * 100).toFixed(1) + '%';
+const fmtD = d => iso(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', timeZone: 'UTC' });
+let rows = enrich(parseCSV($('#csv').textContent)), fixes = { version: '2026-10-07', page2: '2026-10-28' }, open = null, rankBy = 'gbp', fixTarget = null;
+const W = weeks(rows);
+function toast(t) { const e = $('#toast'); e.textContent = t; e.classList.add('show'); clearTimeout(toast.h); toast.h = setTimeout(() => e.classList.remove('show'), 2200); }
+function render() {
+  const T = totals(rows), last = new Date(W.start.getTime() + (W.n - 1) * 7 * DAY);
+  $('#range').textContent = `Claims received ${fmtD(rows.map(r => r.date_received).sort()[0])} to ${fmtD(W.asOf)} 2026 · ${T.claims} claims`;
+  $('#kpis').innerHTML = `
+   <div class="kpi"><div class="l">Overrides</div><div class="v" id="kOver">${T.overrides}</div><div class="s">${pct(T.rate)} of claims</div>
+    <div class="x">Claims where the handler changed the AI's decision, or kept it and changed the payout.</div></div>
+   <div class="kpi"><div class="l">£ at stake if the AI had been followed</div><div class="v" id="kGbp">${gbp(T.gbp)}</div>
+    <div class="s">${gbp(T.over)} overpaid · ${gbp(T.under)} underpaid · ${gbp(T.delay)} delayed</div>
+    <div class="x">What these claims would have cost if the handler had done what the AI said. Delayed: valid claims held up by a fraud flag (${gbp(T.delayFlag)}) or a request for information (${gbp(T.delayInfo)}).</div></div>
+   <div class="kpi"><div class="l">Valid claims the AI denied</div><div class="v bad" id="kDen">${T.denied}</div><div class="s">${gbp(T.deniedGbp)}, every one caught by a handler</div>
+    <div class="x">The AI said Deny and the handler approved and paid the claim.</div></div>`;
+  const n = $('#notice');
+  if (T.unnamed) { n.className = 'notice'; n.innerHTML = `<span class="grow"><b>Needs a team lead: ${T.unnamed} overrides (${gbp(T.unnamedGbp)}) don't say what went wrong yet.</b> The handler's note was too vague to name a mistake, for example "disagree w AI" or "see notes", so a team lead names it from the claim.</span><button class="btn" id="openReview">Name them</button>`; }
+  else { n.className = 'notice done'; n.innerHTML = `<span class="grow"><b>Every override names a mistake.</b> New vague notes will show here for a team lead.</span>`; }
+  $('#openReview') && ($('#openReview').onclick = openReview);
+  $('#legend').innerHTML = `<span><span class="mk h">BY HAND</span>Fixed or Not started: entered by you when you record a fix</span><span><span class="mk c">COUNTED</span>Repeats: counted from overrides received after the fix date</span><span><i class="sw" style="background:#9fa8da"></i>Overrides per week, ${fmtD(W.start.toISOString().slice(0, 10))} to ${fmtD(last.toISOString().slice(0, 10))} (${W.n} weeks)</span><span><i class="sw" style="background:var(--bad)"></i>after the fix</span>`;
+  const M = mistakes(rows, fixes, rankBy);
+  let h = `<div class="hd"><span></span><span>Mistake</span><span>Step</span><span class="n">Overrides</span><span class="n">£ at stake</span><span class="n">Valid claims denied</span><span>Claim types</span><span>Overrides per week</span><span>Fix</span></div>`;
+  M.forEach((m, i) => {
+    const bars = m.bars.map((b, w) => (m.fixWeek === w ? '<i class="fixline" title="Fix recorded"></i>' : '') + (b ? `<i class="${m.fix && w >= m.fixWeek ? 'after' : ''}" style="height:${6 + b * 8}px" title="${b} override${b > 1 ? 's' : ''}"></i>` : '<i class="z"></i>')).join('');
+    let st = `<span class="hand"><span class="mk h">BY HAND</span>Not started</span>`;
+    if (m.fix) { const back = m.repeats > 0;
+      st = `<span class="hand"><span class="mk h">BY HAND</span>Fixed ${fmtD(m.fix)}</span><span class="calc ${back ? 'back' : 'ok'}"><span class="mk c">COUNTED</span>${back ? `Came back ${m.repeats} time${m.repeats > 1 ? 's' : ''}` : (m.weeksSince ? `0 repeats in ${m.weeksSince} week${m.weeksSince > 1 ? 's' : ''}` : '0 repeats so far')}</span>`; }
+    h += `<div class="row ${open === m.id ? 'open' : ''}" data-id="${m.id}"><span class="rank">${i + 1}</span><span><span class="chev">▶</span><span class="mname">${m.name}</span>${m.count === 1 ? '<span class="once">Seen once</span>' : ''}</span>
+      <span><span class="step">${m.step}</span></span><span class="n">${m.count}</span><span class="n">${gbp(m.gbp)}</span><span class="n ${m.denied ? 'denied' : 'zero'}">${m.denied}</span>
+      <span class="types">${m.types.map(([t, c]) => `<span>${t} ${c}</span>`).join(' · ')}</span><span><div class="spark">${bars}</div></span><span class="st">${st}</span></div>
+      <div class="detail ${open === m.id ? 'open' : ''}" data-for="${m.id}"><div><div class="dh">${m.desc}. ${m.count} claim${m.count > 1 ? 's' : ''} behind this mistake, with the handler's note as written</div>
+      ${m.rows.map(r => `<div class="cl"><span class="id">${r.claim_id}</span><span class="t">${r.claim_type} · ${r.claim_example} · ${fmtD(r.date_received)}</span><span>AI: ${r.ai_recommendation}${r.ai_payout_gbp ? ' ' + gbp(r.ai_payout_gbp) : ''} → ${r.handler_final_decision}${r.final_payout_gbp ? ' ' + gbp(r.final_payout_gbp) : ''}</span><span class="note">“${r.note}”${m.fix && r.date_received > m.fix ? ' <span class="after">after the fix</span>' : ''}</span><span class="pill ${r.kind === 'Valid claim denied' ? 'den' : ''}">${r.kind}${r.gbp ? ' · ' + gbp(r.gbp) : ''}</span></div>`).join('')}</div>
+      <div class="side"><span class="ai">AI summary</span><span class="conf">${m.rows.some(r => r.renamedByLead) ? '✓ Includes overrides named by a team lead' : '✓ Confirmed by a team lead'}</span><p>${m.summary}</p>
+       <div class="kv"><span>First seen</span><span>${fmtD(m.first)}</span><span>Last seen</span><span>${fmtD(m.last)}</span><span>Fix</span><span>${m.fix ? 'Recorded for ' + fmtD(m.fix) : 'None recorded'}</span></div>
+       <button class="btn primary" data-fix="${m.id}">${m.fix ? 'Change the fix date' : 'Record a fix'}</button>${m.fix ? `<div class="undo"><button class="link" data-unfix="${m.id}">Remove the fix</button></div>` : ''}</div></div>`;
+  });
+  h += `<div class="foot" id="foot">${M.length} mistakes · ${M.reduce((s, m) => s + m.count, 0)} overrides named, ${T.unnamed} waiting for a team lead</div>`;
+  $('#table').innerHTML = h;
+  document.querySelectorAll('.row').forEach(e => e.onclick = () => { open = open === e.dataset.id ? null : e.dataset.id; render(); });
+  document.querySelectorAll('[data-fix]').forEach(b => b.onclick = ev => { ev.stopPropagation(); openFix(b.dataset.fix); });
+  document.querySelectorAll('[data-unfix]').forEach(b => b.onclick = () => { delete fixes[b.dataset.unfix]; render(); toast('Fix removed. Repeats are no longer counted.'); });
+  $('#typeTable').innerHTML = `<tr><th>Claim type</th><th class="n">Claims</th><th class="n">Overrides</th><th class="n">Override rate</th></tr>` + byType(rows).map(t => `<tr><td>${t.type}</td><td class="n">${t.claims}</td><td class="n">${t.overrides}</td><td class="n">${pct(t.rate)}</td></tr>`).join('');
+}
+function openFix(id) { fixTarget = id; const m = mistakes(rows, fixes).find(x => x.id === id);
+  $('#fixFor').textContent = `${m.name} · ${m.count} overrides, last on ${fmtD(m.last)}`; $('#fixDate').value = fixes[id] || W.asOf; $('#fixWhat').value = ''; checkFix(); $('#fixModal').classList.add('open'); }
+function checkFix() { const m = mistakes(rows, fixes).find(x => x.id === fixTarget), d = $('#fixDate').value, after = m.rows.filter(r => r.date_received > d).length, w = $('#fixWarn');
+  w.style.display = after ? 'block' : 'none'; w.textContent = after ? `Warning: ${after} override${after > 1 ? 's' : ''} received after this date will count as repeats.` : ''; }
+$('#fixDate').oninput = checkFix;
+$('#fixSave').onclick = () => { const d = $('#fixDate').value; if (!d) return; fixes[fixTarget] = d; $('#fixModal').classList.remove('open'); open = fixTarget; render();
+  const m = mistakes(rows, fixes).find(x => x.id === fixTarget); toast(`Fix recorded for ${fmtD(d)}. ${m.repeats} repeat${m.repeats === 1 ? '' : 's'} counted since.`);
+  const r = document.querySelector(`.row[data-id="${fixTarget}"]`); r && r.classList.add('flash'); };
+function openReview() { renderReview(); $('#reviewModal').classList.add('open'); }
+function renderReview() { const all = rows.filter(r => r.override && (!r.mistake || r.renamedByLead)), left = all.filter(r => !r.mistake).length;
+  $('#revProgress').textContent = `${all.length - left} of ${all.length} named. Read the note and the claim, then pick the mistake; the table updates as you go.`;
+  $('#revList').innerHTML = all.map(r => `<div class="rv ${r.mistake ? 'done' : ''}"><span class="id"><b>${r.claim_id}</b></span><span>${r.claim_type} · ${r.claim_example} · AI: ${r.ai_recommendation} → ${r.handler_final_decision}${r.gbp ? ' · ' + gbp(r.gbp) : ''}<br><i>Note: “${r.note || 'no note'}”</i></span>
+    <select data-claim="${r.claim_id}"><option value="">Pick the mistake</option>${MISTAKES.map(m => `<option value="${m.id}" ${r.mistake === m.id ? 'selected' : ''}>${m.step}: ${m.name}</option>`).join('')}</select></div>`).join('');
+  document.querySelectorAll('#revList select').forEach(s => s.onchange = () => { rows = rename(rows, s.dataset.claim, s.value || null); render(); renderReview(); if (s.value) toast(`${s.dataset.claim} added to "${MISTAKES.find(m => m.id === s.value).name}".`); }); }
+document.querySelectorAll('[data-close]').forEach(b => b.onclick = () => b.closest('.modal-bg').classList.remove('open'));
+document.querySelectorAll('.modal-bg').forEach(m => m.onclick = e => { if (e.target === m) m.classList.remove('open'); });
+$('#rankBy').onchange = e => { rankBy = e.target.value; render(); toast('Re-ranked.'); };
+document.querySelectorAll('.tabs button').forEach(b => b.onclick = () => { document.querySelectorAll('.tabs button').forEach(x => x.classList.toggle('on', x === b)); $('#tab-mistake').hidden = b.dataset.tab !== 'mistake'; $('#tab-type').hidden = b.dataset.tab !== 'type'; });
+render(); document.body.dataset.ready = '1';
+</script>
+</body></html>

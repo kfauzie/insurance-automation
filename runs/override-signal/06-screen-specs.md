@@ -6,24 +6,24 @@
 
 | # | Screen | User | Status |
 |---|---|---|---|
-| 1 | [Overrides, By mistake](design/1-mistake-log.png) ([HTML](design/1-mistake-log.html)) | VP of Claims, with the engineering leads | Designed: for your review |
-| 2 | Team lead review | Team lead | Specified; designed once screen 1 is agreed |
-| 3 | Record a fix (pop-up on screen 1) | Engineering lead | Specified; designed once screen 1 is agreed |
+| 1 | [Overrides, By mistake](design/1-mistake-log.png) (a screenshot of the prototype, [build/mvp.html](build/mvp.html)) | The PM for the claims platform and the claims team leads | Built in the prototype |
+| 2 | Team lead review | Team lead | Built in the prototype as a pop-up ("Name them") |
+| 3 | Record a fix (pop-up on screen 1) | The PM | Built in the prototype |
 | Hand-over | Handlers see "Fixed [date] · [n] repeats" next to the AI's recommendation in the claims workspace | Handler | A change to the existing workspace; later |
 
 ## Screen 1: Overrides, By mistake
 
-**Job:** decide what the engineers fix next, and check each fix landed.
+**Job:** decide what to ask engineering to fix next, and check each fix landed. The VP is unlikely to go to this level of detail; the PM and team leads use it, and take the top mistakes to engineering.
 
 | Part | Shows | Acceptance criteria |
 |---|---|---|
 | Header | Team, user, job to be done; title "Overrides" with a "Synthetic data" tag; the date range and claim count | Short labelled lines, no paragraph |
 | Tabs | "By claim type" (the existing view, unchanged) and "By mistake" (New) | The existing view is one click away |
-| Three numbers | Overrides (count and % of claims); £ at stake if the AI had been followed, split into overpaid, underpaid and delayed; valid claims the AI denied (count and £) | Each label has a hover definition; the split adds up to the total |
+| Three numbers | Overrides (count and % of claims); £ at stake if the AI had been followed, split into overpaid, underpaid and delayed; valid claims the AI denied (count and £) | Each card explains its number in a line on screen; delayed is split into fraud flags and information requests; the split adds up to the total |
 | Notice | Overrides the AI couldn't name, with their £, and a button to send them to team lead review | Shown only when there are any; disappears once all are named |
 | Rank by | £ at stake (Default), Valid claims denied first, Overrides | Changing it re-sorts the table and keeps the open row open |
-| Table | One row per mistake: rank, name (with a one-line description when expanded), step (Policy check, Fraud check, Document reading, Documents requested), overrides, £ at stake, valid claims denied (red when above 0), the last 14 weeks as weekly bars, fix status | Rows add up to the three numbers; claim type is not a column (it doesn't separate the mistakes: 16.7% to 20.0%) |
-| Fix status | Not started (grey); Fixed [date] · [n] repeats in [n] weeks (green); Fixed [date] · came back [n] times (red, with the repeats after the fix shown in red in the bars) | Repeats are counted only after the fix date |
+| Table | One row per mistake: rank, name (with a one-line description when expanded), step (Policy check, Fraud check, Document reading, Documents requested), overrides, £ at stake, valid claims denied (red when above 0), claim types with counts (Motor, Home, Commercial property, Travel, Pet, Gadget), overrides per week as labelled bars, fix status | Rows add up to the three numbers; claim types are shown per mistake, but ranking is by mistake, since claim type alone doesn't separate them |
+| Fix status | Two lines, each marked: **By hand**, "Not started" or "Fixed [date]", entered by the PM when they record a fix; **Counted**, "0 repeats in [n] weeks" (green) or "Came back [n] times" (red), counted by code from overrides received after the fix date. A legend above the table says so | Repeats are counted only after the fix date |
 | Expanded row | Every claim behind the mistake, one line each: claim, claim type and date, the AI's call and the handler's call with £, the handler's note as written (in quotes), and what it would have done ("Valid claim denied", "Paid too much", "Paid too little", "Delayed"). Beside it: the AI summary of why the AI got it wrong, marked "AI summary" and "Confirmed by a team lead" (or "Not confirmed yet"), first and last seen, claim types, and the main action, **Record a fix** | The handler's words and the AI's summary look different; one primary button |
 
 **Example input:** the 300 synthetic claims; 55 overrides. **Expected output:** 55 overrides, £68,714 at stake; 14 valid claims denied, £27,611; top row "Missed cover on the policy schedule": 5 overrides, £14,502, 5 denied.
@@ -34,7 +34,7 @@
 - No overrides in the range: "No overrides between [dates]" in place of the table.
 - A team lead changes a mistake's name or merges two: the table updates and the expanded row says "Renamed by a team lead".
 
-**Handoff:** Send to team lead review → screen 2. Record a fix → screen 3.
+**Handoff:** Name them → screen 2. Record a fix → screen 3. The PM takes the top mistakes to engineering (outside the product).
 
 ## Screen 2: Team lead review
 - **Job:** confirm or correct how the AI named each override, starting with the ones it couldn't name.

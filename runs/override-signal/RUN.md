@@ -8,7 +8,7 @@
 **Base product:** extends Fernway's existing internal claims platform and its AI automations; not a new claims system.
 - Known from the call: handlers see the AI's recommendation in the claims workspace and use an Override button, pick a decision and type a required note. Engineers built a dashboard of override rates by claim type.
 - Assumed: the platform logs the AI's recommendation and amount, the handler's decision and amount, and the note, for every claim (as in the export). It does not yet log which AI step or version made the call.
-**Data:** `data/claims_synthetic.csv` (synthetic, provided): 300 claims, 3 Aug to 11 Nov 2026; one AI recommendation and the handler's final call per claim.
+**Data:** `data/claims_synthetic.csv` (synthetic, provided): 300 claims, 3 Aug to 11 Nov 2026; one AI recommendation and the handler's final call per claim. `data/claims_synthetic_v2.csv` (used from step 6 on) keeps every claim, decision, amount and note and replaces the claim types with Motor, Home, Commercial property, Travel, Pet and Gadget, made by `notebooks/make_data.py`.
 
 | Step | Skill | Output |
 |---|---|---|
@@ -18,7 +18,7 @@
 | 4. Research synthesis | `pm-1-data-discovery` (Answer) | [04-synthesis.md](04-synthesis.md) |
 | 5. Spec: solution concept | `pm-3-problem-to-solution-concept` | Notion (private draft): [solution concept](https://app.notion.com/p/4218f31ef05f81f2bcf2f740895edcbf) |
 | 6. Design | `pm-4-solution-design` | [06-screen-specs.md](06-screen-specs.md), [design/](design/) (screen 1 designed) |
-| 7. Prototype | `pm-5-mvp-build` | |
+| 7. Prototype | `pm-5-mvp-build` | [build/mvp.html](build/mvp.html); tests `node build/test_mvp.js`, headless check `node build/check_mvp.js` |
 | 8. MVP review | `pm-6-mvp-review` | |
 
 ## Decisions I made (and what I turned down)
@@ -32,3 +32,6 @@
 | Rank by £ at stake, and show how many were valid claims denied | Simple and checkable; whether denials should count extra is left to the MVP review | A weighted score nobody can check by hand |
 | Add a "By mistake" tab to the existing Overrides page, keep "By claim type" | Feedback: the team very likely already tracks override rates; this upgrades it with the why, the £ and fix tracking | A new standalone tool |
 | Fix status that flips to "came back" when a fixed mistake repeats | The VP's test of success is "the same mistake stopped coming back" (hypothesis); error trackers use the same pattern | A one-off "resolved" checkbox |
+| Users are the PM and the claims team leads; the PM records fixes | Feedback: the VP is unlikely to go into this detail | The VP and engineering leads as users |
+| Mark each fix status as by hand (Fixed, Not started) or counted (repeats after the fix date) | Feedback: make clear what a person entered and what code counted | One combined status |
+| Keyword rules stand in for the AI that names mistakes in the prototype, said on screen | Keeps every number testable now; the AI step is the real build | Calling a model in the prototype |

@@ -1,7 +1,7 @@
-"""pm-1 Answer: test the claims from the discovery call against data/claims_synthetic.csv (SYNTHETIC).
+"""pm-1 Answer: test the claims from the discovery call against data/claims_synthetic_v2.csv (SYNTHETIC).
 Reuses the override, cause and money-at-stake definitions from review.py. Run from runs/override-signal."""
 import pandas as pd
-d = pd.read_csv("data/claims_synthetic.csv", parse_dates=["date_received"])
+d = pd.read_csv("data/claims_synthetic_v2.csv", parse_dates=["date_received"])
 d["override_reason"] = d["override_reason"].fillna("").str.strip()
 d["decision_changed"] = d.ai_recommendation != d.handler_final_decision
 d["amount_changed"] = (~d.decision_changed) & (d.ai_payout_gbp != d.final_payout_gbp)

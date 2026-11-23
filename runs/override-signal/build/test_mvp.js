@@ -1,0 +1,36 @@
+// SYNTHETIC data (Fernway is a made-up name). Known-answer tests for the calculations in mvp.html. Run: node test_mvp.js
+const fs = require('fs'), path = require('path');
+const html = fs.readFileSync(path.join(__dirname, 'mvp.html'), 'utf8');
+const m = { exports: {} }; new Function('module', html.split('<script id="calc">')[1].split('</script>')[0])(m); const C = m.exports;
+const file = fs.readFileSync(path.join(__dirname, '../data/claims_synthetic_v2.csv'), 'utf8').trim();
+let fail = 0; const t = (name, ok, got) => { if (!ok) fail++; console.log(`${ok ? 'PASS' : 'FAIL'} ${name}${got !== undefined ? ': ' + got : ''}`); };
+t('the page uses the data file exactly as it is', html.split('<script type="text/csv" id="csv">\n')[1].split('\n</script>')[0] === file);
+const rows = C.enrich(C.parseCSV(file)), T = C.totals(rows);
+t('300 claims, 3 Aug to 11 Nov', T.claims === 300 && C.weeks(rows).asOf === '2026-11-11' && C.weeks(rows).n === 15);
+t('55 overrides: 35 changed decisions, 20 changed amounts', T.overrides === 55 && rows.filter(r => r.override && r.ai_recommendation !== r.handler_final_decision).length === 35, T.overrides);
+t('£ at stake £68,714 = £24,599 overpaid + £30,390 underpaid + £13,725 delayed', T.gbp === 68714 && T.over === 24599 && T.under === 30390 && T.delay === 13725 && T.over + T.under + T.delay === T.gbp, `${T.gbp} = ${T.over} + ${T.under} + ${T.delay}`);
+t('delayed: fraud flags £8,739, information requests £4,986', T.delayFlag === 8739 && T.delayInfo === 4986);
+t('14 valid claims denied, £27,611', T.denied === 14 && T.deniedGbp === 27611);
+t('10 overrides with no usable note, £11,281', T.unnamed === 10 && T.unnamedGbp === 11281);
+const fixes = { version: '2026-10-07', page2: '2026-10-28' }, M = C.mistakes(rows, fixes), by = id => M.find(x => x.id === id);
+t('every named override has exactly one mistake: 45 across 15 mistakes', M.reduce((s, x) => s + x.count, 0) === 45 && M.length === 15);
+[['cover', 5, 14502, 5], ['window', 4, 7830, 4], ['version', 3, 4356, 0], ['page2', 4, 3574, 0], ['ocr', 4, 2917, 0], ['date', 3, 3001, 0]].forEach(([id, n, g, d]) =>
+  t(`${by(id).name}: ${n} overrides, £${g}, ${d} valid claims denied`, by(id).count === n && by(id).gbp === g && by(id).denied === d, `${by(id).count}, ${by(id).gbp}, ${by(id).denied}`));
+t('missed cover is ranked first by £ at stake', M[0].id === 'cover');
+t('missed cover covers four claim types: Commercial property 2, Home 1, Motor 1, Travel 1', JSON.stringify(by('cover').types) === JSON.stringify([['Commercial property', 2], ['Home', 1], ['Motor', 1], ['Travel', 1]]), JSON.stringify(by('cover').types));
+t('wrong policy version fixed 7 Oct: came back 2 times (counted after the fix date)', by('version').repeats === 2);
+t('total read from the wrong page fixed 28 Oct: 0 repeats in 2 weeks', by('page2').repeats === 0 && by('page2').weeksSince === 2);
+t('no fix recorded: no repeats counted', by('cover').fix === null && by('cover').repeats === null);
+const M2 = C.mistakes(rows, { ...fixes, cover: '2026-08-20' }); t('a fix on 20 Aug for missed cover counts the 2 later overrides as repeats', M2.find(x => x.id === 'cover').repeats === 2);
+const D = C.mistakes(rows, fixes, 'denied'); t('rank by valid claims denied: missed cover (5), then time window (4)', D[0].id === 'cover' && D[1].id === 'window');
+const N = C.mistakes(rows, fixes, 'count'); t('rank by overrides: missed cover first (5)', N[0].id === 'cover' && N[0].count === 5);
+t('weekly bars add up to each mistake\'s overrides', M.every(x => x.bars.reduce((a, b) => a + b, 0) === x.count));
+const R = C.rename(rows, 'CLM-1298', 'asked'), TR = C.totals(R), MR = C.mistakes(R, fixes);
+t('a team lead names CLM-1298 (£3,717): unnamed 9, £7,564; that mistake gains 1 override and £3,717', TR.unnamed === 9 && TR.unnamedGbp === 7564 && MR.find(x => x.id === 'asked').count === by('asked').count + 1 && MR.find(x => x.id === 'asked').gbp === by('asked').gbp + 3717);
+const types = C.byType(rows); t('claim types are the agreed six, with no Liability', JSON.stringify(types.map(x => x.type).sort()) === JSON.stringify(['Commercial property', 'Gadget', 'Home', 'Motor', 'Pet', 'Travel']));
+t('override rate by claim type: 17.0% to 25.0% (Gadget, 12 claims)', Math.min(...types.map(x => x.rate)).toFixed(3) === '0.170' && types[0].type === 'Gadget' && types[0].rate === 0.25 && types[0].claims === 12);
+const text = html.replace(/<script type="text\/csv"[\s\S]*?<\/script>/, '');
+t('no em dashes', !text.includes('—'));
+t('synthetic data is labelled on screen', text.includes('Synthetic data'));
+t('the made-up company name only; no real one', !/claimsorted|claim sorted/i.test(html + file));
+console.log(fail ? `${fail} FAILED` : 'All tests pass'); process.exit(fail ? 1 : 0);

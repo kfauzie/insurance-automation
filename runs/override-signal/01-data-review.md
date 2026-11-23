@@ -2,6 +2,8 @@
 
 > **SYNTHETIC DATA.** Fernway is a made-up name; every claim is invented. Every number below comes from [`notebooks/review.py`](notebooks/review.py) (run from this folder: `python3 notebooks/review.py`).
 
+> **Claim types updated (23 Nov):** the data is now `data/claims_synthetic_v2.csv`, made from the provided file by [`notebooks/make_data.py`](notebooks/make_data.py). Every claim, decision, amount and note is unchanged; claim types are now Motor (including vans), Home, Commercial property, Travel, Pet and Gadget, each with an example such as "Burst pipe". Liability is no longer a claim type. Only the claim-type numbers below changed.
+
 ## 1. The data
 
 | claim_id | date_received | claim_type | claimed_amount_gbp | ai_recommendation | ai_payout_gbp | handler_final_decision | final_payout_gbp | override_reason |
@@ -12,7 +14,7 @@
 | CLM-1004 | 2026-08-29 | Motor | 4350 | Approve | 4208 | Approve | 4208 | |
 | CLM-1005 | 2026-09-18 | Pet vet bills | 2090 | Approve | 1954 | Approve | 1954 | |
 
-- **In two lines:** 300 claims received 3 Aug to 11 Nov 2026, across 5 claim types (Motor 94, Property damage 86, Pet vet bills 56, Travel 40, Liability 24). Each row has one AI recommendation (Approve, Deny, Request info or Flag for fraud review) and amount, the handler's final decision and amount, and a free-text reason when they differ.
+- **In two lines:** 300 claims received 3 Aug to 11 Nov 2026, across 6 claim types (Motor 94, Home 61, Pet 56, Travel 40, Commercial property 37, Gadget 12). Each row has one AI recommendation (Approve, Deny, Request info or Flag for fraud review) and amount, the handler's final decision and amount, and a free-text reason when they differ.
 - **How I counted an override:** the handler's decision differs from the AI's, or the decision is the same but the payout differs. That gives **55 overrides (18.3%)**: 35 changed decisions, 20 changed amounts only.
 - **Money at stake:** what the claim would have cost if the handler had followed the AI: the payout difference for amount changes; the payout lost for a Deny the handler approved; the payout made for an Approve the handler denied. Overrides to Request info or a fraud review count as £0 (judgement: the money effect isn't known yet). Total: **£68,714**.
 - **Quality check (doesn't change the findings):** every claimed amount is a round £10, which real data rarely is. 7 claims were paid more than claimed (e.g. CLM-1008: claimed £840, paid £1,193), all amount corrections. 4 reasons quote a figure that doesn't match the final payout (CLM-1109: the reason says £3,771, but £2,609 was paid; maybe after the excess). There is no step, model version or handler column, so the data can't show which AI step went wrong or when a fix shipped.
@@ -50,7 +52,7 @@ How I grouped the reasons (judgement, keyword rules in the script, every reason 
 - Is the reason required when a handler changes the AI's call? Only 1 of 55 is blank.
 
 ## 5. Looked at, nothing to ask about
-- **Claim type doesn't separate the mistakes.** The override rate sits between 17% and 20% for all five types (Travel 20.0%, Property damage 19.8%, Pet vet bills 17.9%, Motor 17.0%, Liability 16.7%). What went wrong separates them; the claim type doesn't. Property damage still carries the most money (£28,067), because its claims are bigger.
+- **Claim type doesn't separate the mistakes.** The override rate sits between 17.0% and 20.0% for five of the six types (Travel 20.0%, Commercial property 18.9%, Home 18.0%, Pet 17.9%, Motor 17.0%); Gadget is 25.0%, but on only 12 claims (3 overrides). What went wrong separates them; the claim type doesn't. Commercial property carries the most money (£21,466), because its claims are bigger.
 - **Overall rate over time:** 20.4% in August, 14.3% in September, 19.5% in October, 19.4% in November (31 claims so far). With 80 to 100 claims a month, a move of a few points can't be told apart from chance.
 - **Agreed approvals:** the AI's payout is 85% to 100% of the claimed amount (median 93%), so deductions look consistent when handlers agree.
 

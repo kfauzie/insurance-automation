@@ -1,7 +1,7 @@
-"""pm-1 Initial review of data/claims_synthetic.csv (SYNTHETIC). Run from runs/override-signal: python3 notebooks/review.py"""
+"""pm-1 Initial review of data/claims_synthetic_v2.csv (SYNTHETIC). Run from runs/override-signal: python3 notebooks/review.py"""
 import pandas as pd
 pd.set_option("display.width", 200); pd.set_option("display.max_columns", 20)
-d = pd.read_csv("data/claims_synthetic.csv", parse_dates=["date_received"])
+d = pd.read_csv("data/claims_synthetic_v2.csv", parse_dates=["date_received"])
 d["override_reason"] = d["override_reason"].fillna("").str.strip()
 
 print("== Shape"); print(len(d), "claims;", d.date_received.min().date(), "to", d.date_received.max().date())
