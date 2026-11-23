@@ -8,7 +8,7 @@ The discovery-to-prototype workflow from `product-workflow`, run as Claude Code 
 
 ## Active context and run
 - **Context folder:** `context/`
-- **Run folder:** not set yet. Set it as `runs/<short-name>/` when the first problem is chosen.
+- **Run folder:** `runs/override-signal/`
 
 ## Base product
 Fernway already runs an internal claims platform its handlers use every day, with AI automations that engineers build. Every prototype extends or changes that platform; it never designs a claims system from scratch. Where we don't know how the base product works, state the assumption in the run's `RUN.md` and keep the prototype easy to fit into it.
